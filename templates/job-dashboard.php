@@ -82,18 +82,12 @@ $submit_job_form_page_id = get_option( 'job_manager_submit_job_form_page_id' );
 							</div>
 						<?php endforeach; ?>
 						<div class="jm-dashboard-job-column actions job-dashboard-job-actions">
+							<?php do_action( 'job_manager_job_dashboard_column_actions', $job, $job_actions[ $job->ID ] ?? [] ); ?>
 							<?php
 							$actions_html = '';
 							if ( ! empty( $job_actions[ $job->ID ] ) ) {
-								foreach ( $job_actions[ $job->ID ] as $action => $value ) {
-									$action_url = add_query_arg( [
-										'action' => $action,
-										'job_id' => $job->ID,
-									] );
-									if ( $value['nonce'] ) {
-										$action_url = wp_nonce_url( $action_url, $value['nonce'] );
-									}
-									$actions_html .= '<a href="' . esc_url( $action_url ) . '" class=" jm-dashboard-action jm-ui-button--link job-dashboard-action-' . esc_attr( $action ) . '">' . esc_html( $value['label'] ) . '</a>' . "\n";
+								foreach ( $job_actions[ $job->ID ] as $action ) {
+									$actions_html .= '<a href="' . esc_url( $action['url'] ) . '" class=" jm-dashboard-action jm-ui-button--link job-dashboard-action-' . esc_attr( $action['name'] ) . '">' . esc_html( $action['label'] ) . '</a>' . "\n";
 								}
 							}
 

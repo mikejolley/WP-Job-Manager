@@ -37,6 +37,7 @@
 	font-size: var(--jm-ui-button-font-size);
 	font-weight: 400;
 	letter-spacing: -0.1px;
+	white-space: nowrap;
 
 	transition: color 0.2s ease-out, background 0.2s ease-out;
 
@@ -64,6 +65,16 @@
 			background-color: color-mix(in srgb, #fff, currentColor 85%);
 		}
 	}
+}
+
+.jm-ui-button--small,
+{
+	border-radius: 2px;
+	padding: var(--jm-ui-space-xxs) var(--jm-ui-space-s);
+	gap: var(--jm-ui-space-xs);
+	font-size: var(--jm-ui-font-size-s);
+	font-weight: 400;
+	letter-spacing: -0.1px;
 }
 
 .jm-ui-button__a {

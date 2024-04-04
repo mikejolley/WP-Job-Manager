@@ -76,6 +76,7 @@
 
 	.jm-ui-actions-row {
 		gap: var(--jm-ui-space-sm);
+		flex-wrap: wrap;
 	}
 
 }
@@ -89,7 +90,28 @@
 @media (max-width: 600px) {
 	.jm-dashboard__overlay {
 		height: 100%;
+		max-width: 100%;
+		margin-bottom: 0;
 	}
+
+	.jm-job-overlay-footer {
+		.jm-ui-actions-row {
+			gap: var(--jm-ui-space-s);
+
+			* {
+				font-size: var(--jm-ui-font-size-s);
+			}
+		}
+
+		.jm-ui-button--outline {
+			padding: var(--jm-ui-space-xxs) var(--jm-ui-space-s2);
+		}
+
+		.jm-ui-button--link {
+			padding: var(--jm-ui-space-xxs) var(--jm-ui-space-xs);
+		}
+	}
+
 }
 
 @keyframes jm-job-overlay-fade-in {
