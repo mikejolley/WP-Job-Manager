@@ -251,7 +251,7 @@ class WP_Job_Manager_Settings {
 								'any' => __( 'Jobs will be shown if within ANY selected category', 'wp-job-manager' ),
 								'all' => __( 'Jobs will be shown if within ALL selected categories', 'wp-job-manager' ),
 							],
-							'track'   => 'bool',
+							'track'   => 'value',
 						],
 						[
 							'name'       => 'job_manager_enable_types',
@@ -312,7 +312,7 @@ class WP_Job_Manager_Settings {
 							'type'        => 'text',
 							'placeholder' => __( 'e.g. USD', 'wp-job-manager' ),
 							'attributes'  => [],
-							'track'       => 'bool',
+							'track'       => 'value',
 						],
 						[
 							'name'       => 'job_manager_enable_salary_unit',
@@ -333,7 +333,7 @@ class WP_Job_Manager_Settings {
 							'type'       => 'select',
 							'options'    => job_manager_get_salary_unit_options(),
 							'attributes' => [],
-							'track'      => 'bool',
+							'track'      => 'value',
 						],
 						[
 							'name'     => 'job_manager_display_location_address',
