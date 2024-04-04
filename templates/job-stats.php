@@ -108,7 +108,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</div>
 						<?php foreach ( $section['stats'] as $stat ) : ?>
 							<div class="jm-stat-row jm-ui-row">
-								<?php if ( $stat['icon'] ) {
+								<?php if ( isset( $stat['icon'] ) ) {
 									echo UI_Elements::icon( $stat['icon'], $stat['label'] );
 								} ?>
 								<div class="jm-stat-label">
