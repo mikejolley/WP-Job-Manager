@@ -110,6 +110,9 @@
     <NullArgument>
       <code>null</code>
     </NullArgument>
+    <ParadoxicalCondition>
+      <code><![CDATA[! defined( 'ABSPATH' )]]></code>
+    </ParadoxicalCondition>
     <UndefinedDocblockClass>
       <code>stirng|int</code>
     </UndefinedDocblockClass>

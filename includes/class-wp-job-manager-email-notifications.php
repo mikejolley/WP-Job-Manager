@@ -470,6 +470,7 @@ final class WP_Job_Manager_Email_Notifications {
 				'label'        => false,
 				'std'          => self::get_email_setting_defaults( $email_notification_key ),
 				'settings'     => self::get_email_setting_fields( $email_notification_key ),
+				'track'        => 'bool',
 			];
 		}
 
