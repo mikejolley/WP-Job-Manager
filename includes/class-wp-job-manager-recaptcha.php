@@ -55,12 +55,6 @@ class WP_Job_Manager_Recaptcha {
 		$this->site_key          = get_option( self::RECAPTCHA_SITE_KEY );
 		$this->secret_key        = get_option( self::RECAPTCHA_SECRET_KEY );
 		$this->recaptcha_version = get_option( self::RECAPTCHA_VERSION, 'v2' );
-
-		if ( $this->use_recaptcha_field() ) {
-			add_action( 'submit_job_form_end', [ $this, 'display_recaptcha_field' ] );
-			add_filter( 'submit_job_form_validate_fields', [ $this, 'validate_recaptcha_field' ] );
-			add_filter( 'submit_draft_job_form_validate_fields', [ $this, 'validate_recaptcha_field' ] );
-		}
 	}
 
 	/**
@@ -76,10 +70,16 @@ class WP_Job_Manager_Recaptcha {
 	}
 
 	/**
-	 * Enqueue the scripts for the form.
+	 * Enqueue the scripts and add appropriate hooks for the recaptcha to load.
 	 */
-	public static function enqueue_scripts() {
+	public static function enqueue_recaptcha() {
 		$instance = self::instance();
+
+		if ( $instance->use_recaptcha_field() ) {
+			add_action( 'submit_job_form_end', [ $instance, 'display_recaptcha_field' ] );
+			add_filter( 'submit_job_form_validate_fields', [ $instance, 'validate_recaptcha_field' ] );
+			add_filter( 'submit_draft_job_form_validate_fields', [ $instance, 'validate_recaptcha_field' ] );
+		}
 
 		if (
 			$instance->use_recaptcha_field() &&
