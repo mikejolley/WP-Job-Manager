@@ -136,7 +136,7 @@ abstract class WP_Job_Manager_Form {
 	 * @param array $atts Attributes to use in the view handler.
 	 */
 	public function output( $atts = [] ) {
-		WP_Job_Manager\WP_Job_Manager_Recaptcha::enqueue_scripts();
+		WP_Job_Manager\WP_Job_Manager_Recaptcha::enqueue_recaptcha();
 		$step_key = $this->get_step_key( $this->step );
 		$this->show_errors();
 		$this->show_messages();
@@ -323,7 +323,7 @@ abstract class WP_Job_Manager_Form {
 	 */
 	public function enqueue_scripts() {
 		_deprecated_function( __METHOD__, '$$next-version$$', 'WP_Job_Manager\WP_Job_Manager_Form::enqueue_scripts' );
-		WP_Job_Manager\WP_Job_Manager_Recaptcha::enqueue_scripts();
+		WP_Job_Manager\WP_Job_Manager_Recaptcha::enqueue_recaptcha();
 	}
 
 	/**
