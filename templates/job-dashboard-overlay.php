@@ -9,7 +9,6 @@
  * @version     $$next-version$$
  *
  * @var WP_Post $job Array of job post results.
- * @var array   $job_actions
  */
 
 use WP_Job_Manager\Job_Dashboard_Shortcode;
@@ -58,35 +57,5 @@ $submit_job_form_page_id = get_option( 'job_manager_submit_job_form_page_id' );
 		<?php do_action( 'job_manager_job_overlay_content', $job ); ?>
 
 	</div>
-	<div class="jm-job-overlay-footer">
-		<?php
-		$buttons = [];
-		$actions = [];
-		if ( ! empty( $job_actions ) ) {
-			$primary = Job_Dashboard_Shortcode::get_primary_action( $job, $job_actions );
-
-			if ( $primary ) {
-				$buttons[] = [
-					'label' => $primary['label'],
-					'url'   => $primary['url'],
-					'class' => 'job-dashboard-action-' . esc_attr( $primary['name'] ),
-					'primary' => false,
-				];
-			}
-
-			foreach ( $job_actions as $action ) {
-				if ( ! empty( $primary ) && $primary['name'] === $action['name'] ) {
-					continue;
-				}
-				$actions[] = [
-					'label' => $action['label'],
-					'url'   => $action['url'],
-					'class' => 'job-dashboard-action-' . esc_attr( $action['name'] ),
-				];
-			}
-		}
-
-		echo UI_Elements::actions( $buttons, $actions );
-		?>
-	</div>
+	<div class="jm-job-overlay-footer"><?php do_action( 'job_manager_job_overlay_footer', $job ); ?></div>
 </div>

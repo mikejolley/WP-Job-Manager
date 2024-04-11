@@ -100,6 +100,4 @@ $submit_job_form_page_id = get_option( 'job_manager_submit_job_form_page_id' );
 		<?php endif; ?>
 	</div>
 	<?php get_job_manager_template( 'pagination.php', [ 'max_num_pages' => $max_num_pages ] ); ?>
-
-	<?php Job_Overlay::instance()->output_modal_element(); ?>
 </div>

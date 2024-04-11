@@ -8,6 +8,7 @@
 namespace WP_Job_Manager;
 
 use WP_Job_Manager\UI\Notice;
+use WP_Job_Manager\UI\Redirect_Message;
 use WP_Job_Manager\UI\UI_Elements;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -100,9 +101,7 @@ class Job_Dashboard_Shortcode {
 		);
 		$posts_per_page = $attrs['posts_per_page'];
 
-		\WP_Job_Manager::register_style( 'wp-job-manager-job-dashboard', 'css/job-dashboard.css', [ 'wp-job-manager-ui' ] );
-		wp_enqueue_style( 'wp-job-manager-job-dashboard' );
-		wp_enqueue_script( 'wp-job-manager-job-dashboard' );
+		Job_Overlay::instance()->init_dashboard_overlay();
 
 		ob_start();
 
@@ -134,7 +133,12 @@ class Job_Dashboard_Shortcode {
 		// Cache IDs for access check later on.
 		$this->job_dashboard_job_ids = wp_list_pluck( $jobs->posts, 'ID' );
 
-		echo '<div class="alignwide">' . wp_kses_post( $this->job_dashboard_message ) . '</div>';
+		$message = Redirect_Message::get_message( 'updated' );
+
+		if ( ! empty( $message ) ) {
+			//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in the notice class.
+			echo '<div class="alignwide">' . $message . '</div>';
+		}
 
 		$job_dashboard_columns = apply_filters(
 			'job_manager_job_dashboard_columns',
@@ -160,6 +164,8 @@ class Job_Dashboard_Shortcode {
 			]
 		);
 
+		do_action( 'job_manager_job_dashboard', $jobs );
+
 		return ob_get_clean();
 	}
 
@@ -171,18 +177,16 @@ class Job_Dashboard_Shortcode {
 	 * @return array
 	 */
 	public function get_job_actions( $job ) {
-		if (
-			! get_current_user_id()
-			|| ! $job instanceof \WP_Post
-			|| \WP_Job_Manager_Post_Types::PT_LISTING !== $job->post_type
-			|| ! $this->is_job_available_on_dashboard( $job )
-		) {
+		if ( ! $this->can_manage_job( $job ) ) {
 			return [];
 		}
+
+		$base_url = self::get_job_dashboard_page_url();
 
 		$base_nonce_action_name = 'job_manager_my_job_actions';
 
 		$actions = [];
+
 		switch ( $job->post_status ) {
 			case 'publish':
 				if ( \WP_Job_Manager_Post_Types::job_is_editable( $job->ID ) ) {
@@ -262,7 +266,7 @@ class Job_Dashboard_Shortcode {
 
 		// For backwards compatibility, convert `nonce => true` to the nonce action name.
 		foreach ( $actions as $key => &$action ) {
-			if ( true === $action['nonce'] ) {
+			if ( isset( $action['nonce'] ) && true === $action['nonce'] ) {
 				$action['nonce'] = $base_nonce_action_name;
 			}
 
@@ -510,6 +514,8 @@ class Job_Dashboard_Shortcode {
 			$this->job_dashboard_message = Notice::error( $e->getMessage() );
 		}
 
+		Redirect_Message::redirect( remove_query_arg( [ 'action', 'job_id', '_wpnonce' ] ), $this->job_dashboard_message, 'updated' );
+
 	}
 
 	/**
@@ -663,6 +669,27 @@ class Job_Dashboard_Shortcode {
 		} else {
 			return home_url( '/' );
 		}
+	}
+
+	/**
+	 * Check if the current user can manage this job listing.
+	 *
+	 * @param \WP_Post|null $job
+	 *
+	 * @return bool
+	 */
+	public function can_manage_job( $job ) {
+
+		if ( ! get_current_user_id()
+			|| empty( $job )
+			|| ! $job instanceof \WP_Post
+			|| \WP_Job_Manager_Post_Types::PT_LISTING !== $job->post_type ) {
+			return false;
+		}
+
+		return is_admin()
+			? current_user_can( \WP_Job_Manager_Post_Types::CAP_MANAGE_LISTINGS, $job->ID )
+			: $this->is_job_available_on_dashboard( $job );
 	}
 
 	/**

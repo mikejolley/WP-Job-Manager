@@ -30,7 +30,10 @@ async function showOverlay( eventOrId ) {
 	eventOrId.preventDefault?.();
 	overlayDialog.showModal();
 
-	const id = eventOrId.target?.dataset.jobId ?? eventOrId;
+	const dashboardRowId = eventOrId.target?.dataset.jobId;
+	const adminRowId = eventOrId.target?.closest( 'tr' )?.id?.replace( 'post-', '' );
+
+	const id = dashboardRowId ?? adminRowId ?? eventOrId;
 
 	if ( ! id ) {
 		return;
@@ -42,7 +45,7 @@ async function showOverlay( eventOrId ) {
 	contentElement.innerHTML = '<a class="jm-ui-spinner"></a>';
 
 	try {
-		const response = await fetch( `${ overlayEndpoint }?job_id=${ id }` );
+		const response = await fetch( `${ overlayEndpoint }&job_id=${ id }` );
 
 		if ( ! response.ok ) {
 			throw new Error( response.statusText );
@@ -56,7 +59,7 @@ async function showOverlay( eventOrId ) {
 	}
 
 	const clearHash = () => {
-		history.replaceState( null, '', window.location.pathname );
+		history.replaceState( null, '', window.location.pathname + window.location.search );
 		overlayDialog.removeEventListener( 'close', clearHash );
 	};
 
@@ -67,7 +70,7 @@ async function showOverlay( eventOrId ) {
 
 function setupStatsOverlay() {
 	document
-		.querySelectorAll( '.jm-dashboard-job .job-title' )
+		.querySelectorAll( '.jm-dashboard-job .job-title, tr.job_listing td.column-stats' )
 		.forEach( el => el.addEventListener( 'click', showOverlay ) );
 
 	const urlHash = window.location.hash?.substring( 1 );
