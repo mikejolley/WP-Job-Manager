@@ -121,9 +121,11 @@ class WP_Job_Manager_Recaptcha {
 	/**
 	 * Checks whether reCAPTCHA has been set up and is available.
 	 *
+	 * @access private
+	 *
 	 * @return bool
 	 */
-	private function is_recaptcha_available() {
+	public function is_recaptcha_available() {
 		$is_recaptcha_available = ! empty( $this->site_key ) && ! empty( $this->secret_key );
 
 		/**
