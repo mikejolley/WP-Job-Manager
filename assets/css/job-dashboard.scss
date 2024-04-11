@@ -118,12 +118,8 @@
 	text-decoration: none;
 }
 .jm-dashboard-action--primary {
-	&:not(:hover):not(:active) {
-		color: inherit;
-	}
 	flex-basis: fit-content;
 	white-space: nowrap;
-	font-weight: 600;
 }
 
 .jm-dashboard-action:where(:not(:hover):not(:focus)) {
@@ -138,6 +134,7 @@
 {
 	.jm-dashboard-job {
 		flex-wrap: wrap;
+		align-items: flex-start;
 	}
 
 	.jm-dashboard-header {
