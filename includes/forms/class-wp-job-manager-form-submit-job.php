@@ -843,7 +843,7 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 		];
 
 		if ( ! empty( $values['job']['job_schedule_listing'] ) ) {
-			$is_scheduled_date = $this->calculate_scheduled_dates( $job_data, $values['job']['job_schedule_listing'] );
+			$is_scheduled_date = $this->apply_scheduled_date( $job_data, $values['job']['job_schedule_listing'] );
 
 			if ( ! $is_scheduled_date ) {
 				unset( $values['job']['job_schedule_listing'] );
@@ -1076,7 +1076,7 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 	 *
 	 * @return bool True when the scheduled date is a valid future date, false otherwise.
 	 */
-	public static function calculate_scheduled_dates( array &$job_data, string $scheduled_date ): bool {
+	public static function apply_scheduled_date( array &$job_data, string $scheduled_date ): bool {
 		$maybe_formatted_date = self::maybe_format_future_datetime( $scheduled_date );
 
 		if ( false === $maybe_formatted_date ) {
@@ -1148,7 +1148,7 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 				$update_job['post_author'] = get_current_user_id();
 
 				$job_schedule_listing_date = get_post_meta( $job->ID, '_job_schedule_listing', true );
-				$this->calculate_scheduled_dates( $update_job, $job_schedule_listing_date );
+				$this->apply_scheduled_date( $update_job, $job_schedule_listing_date );
 
 				wp_update_post( $update_job );
 			}
