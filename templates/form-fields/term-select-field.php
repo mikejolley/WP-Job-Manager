@@ -37,7 +37,7 @@ if ( is_array( $selected ) ) {
 $args = [
 	'taxonomy'          => $field['taxonomy'],
 	'hierarchical'      => 1,
-	'show_option_all'   => true,
+	'show_option_all'   => false,
 	'option_none_value' => '',
 	'show_option_none'  => $placeholder,
 	'name'              => isset( $field['name'] ) ? $field['name'] : $key,
