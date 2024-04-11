@@ -15,7 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-$term = get_term_by( 'slug', $field['default'], $field['taxonomy'] );
+$term        = get_term_by( 'slug', $field['default'], $field['taxonomy'] );
+$placeholder = array_key_exists( 'placeholder', $field ) && ! empty( $field['placeholder'] ) ? $field['placeholder'] : esc_html__( 'Select an Option...', 'wp-job-manager' );
 
 // Get selected value.
 if ( isset( $field['value'] ) ) {
@@ -34,21 +35,17 @@ if ( is_array( $selected ) ) {
 }
 
 $args = [
-	'taxonomy'         => $field['taxonomy'],
-	'hierarchical'     => 1,
-	'show_option_all'  => true,
-	'show_option_none' => $field['required'] ? '' : '-',
-	'name'             => isset( $field['name'] ) ? $field['name'] : $key,
-	'orderby'          => 'name',
-	'selected'         => $selected,
-	'hide_empty'       => false,
-	'multiple'         => false,
+	'taxonomy'          => $field['taxonomy'],
+	'hierarchical'      => 1,
+	'show_option_all'   => true,
+	'option_none_value' => '',
+	'show_option_none'  => $placeholder,
+	'name'              => isset( $field['name'] ) ? $field['name'] : $key,
+	'orderby'           => 'name',
+	'selected'          => $selected,
+	'hide_empty'        => false,
 ];
 
-if ( isset( $field['placeholder'] ) && ! empty( $field['placeholder'] ) ) {
-	$args['placeholder'] = $field['placeholder'];
-}
-
-job_manager_dropdown_categories( apply_filters( 'job_manager_term_select_field_wp_dropdown_categories_args', $args ) );
+wp_dropdown_categories( apply_filters( 'job_manager_term_select_field_wp_dropdown_categories_args', $args, $key, $field ) );
 
 if ( ! empty( $field['description'] ) ) : ?><small class="description"><?php echo wp_kses_post( $field['description'] ); ?></small><?php endif; ?>
