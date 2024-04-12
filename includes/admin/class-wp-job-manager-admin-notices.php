@@ -413,7 +413,7 @@ class WP_Job_Manager_Admin_Notices {
 	/**
 	 * Save notice state as dismissed.
 	 *
-	 * @param int $notice_id Notice ID.
+	 * @param string $notice_id Notice ID.
 	 *
 	 * @return void
 	 */

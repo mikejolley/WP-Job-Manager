@@ -13,16 +13,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Admin notice about changes and new features introduced in the latest release.
+ * Update this class for each release to highlight new features or changes.
  */
 class Release_Notice {
+	public const NOTICE_ID = 'release_notice_2_3_0';
 
 	/**
 	 * Set up notice.
 	 */
 	public static function init() {
 		add_filter( 'wpjm_admin_notices', [ __CLASS__, 'add_release_notice' ] );
+		add_action( 'job_manager_action_enable_stats', [ self::class, 'enable_feature' ] );
+	}
 
-		add_action( 'job_manager_action_enable_stats', fn() => \WP_Job_Manager_Settings::instance()->set_setting( \WP_Job_Manager\Stats::OPTION_ENABLE_STATS, '1' ) );
+	/**
+	 * Enable the highlighted feature.
+	 *
+	 * @return void
+	 */
+	public static function enable_feature() {
+		\WP_Job_Manager_Settings::instance()->set_setting( \WP_Job_Manager\Stats::OPTION_ENABLE_STATS, '1' );
 	}
 
 	/**
@@ -35,23 +45,20 @@ class Release_Notice {
 	public static function add_release_notice( $notices ) {
 
 		// Make sure to update the version number in the notice ID when changing this notice for a new release.
-
-		$notice_id = 'release_notice_2_3_0';
-
-		$action_url            = \WP_Job_Manager_Admin_Notices::get_action_url( 'enable_stats', $notice_id );
-		$notices[ $notice_id ] = [
+		$action_url                 = \WP_Job_Manager_Admin_Notices::get_action_url( 'enable_stats', self::NOTICE_ID );
+		$notices[ self::NOTICE_ID ] = [
 			'type'          => 'site-wide',
 			'label'         => 'New',
 			'heading'       => 'Job Statistics',
 
 			'message'       => '<div>' . __(
 				'
-<p>Collect analytics data about site visitors for each job listing. Display the detailed statistics in the refreshed jobs dashboard.</p>
+<p>Collect analytics about site visitors for each job listing. Display the detailed statistics in the refreshed jobs dashboard.</p>
 <ul>
-	<li>Page views and unique visitors with daily breakdown</li>
-	<li>Search impressions and apply button clicks</li>
-	<li>Add-on integration: Job alert impressions, bookmarks, application stats</li>
-	<li>GDPR-compliant, with no personal user information collected</li>
+	<li>Tracks page views and unique visitors, search impressions and apply button clicks.</li>
+	<li>Adds a new overlay to the employer dashboard with aggregated statistics and a daily breakdown chart.</li>
+	<li>Integrates with Job Alerts, Applications, and Bookmarks add-ons.</li>
+	<li>GDPR-compliant, with no personal user information collected.</li>
 </ul>
 ',
 				'wp-job-manager'
@@ -64,7 +71,7 @@ class Release_Notice {
 				],
 				[
 					'label'   => __( 'Dismiss', 'wp-job-manager' ),
-					'url'     => \WP_Job_Manager_Admin_Notices::get_dismiss_url( $notice_id ),
+					'url'     => \WP_Job_Manager_Admin_Notices::get_dismiss_url( self::NOTICE_ID ),
 					'primary' => false,
 				],
 				[
