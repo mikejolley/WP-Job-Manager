@@ -5,6 +5,8 @@
  * @package wp-job-manager
  */
 
+use WP_Job_Manager\Admin\Release_Notice;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -74,6 +76,9 @@ class WP_Job_Manager_Install {
 			$permalink_options                 = (array) json_decode( get_option( 'job_manager_permalinks', '[]' ), true );
 			$permalink_options['jobs_archive'] = '';
 			update_option( 'job_manager_permalinks', wp_json_encode( $permalink_options ) );
+
+			update_option( \WP_Job_Manager\Stats::OPTION_ENABLE_STATS, true );
+			\WP_Job_Manager_Admin_Notices::dismiss_notice( Release_Notice::NOTICE_ID );
 		}
 
 		\WP_Job_Manager\Stats::instance()->migrate_db();
