@@ -74,9 +74,6 @@
       <code>WP_Job_manager</code>
       <code>WP_Job_manager</code>
     </InvalidClass>
-    <ParadoxicalCondition>
-      <code><![CDATA[! defined( 'ABSPATH' )]]></code>
-    </ParadoxicalCondition>
   </file>
   <file src="includes/admin/class-wp-job-manager-cpt.php">
     <InvalidArgument>
