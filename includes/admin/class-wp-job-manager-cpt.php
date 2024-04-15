@@ -263,7 +263,7 @@ class WP_Job_Manager_CPT {
 				'post_status' => 'publish',
 			];
 			wp_update_post( $job_data );
-			wp_safe_redirect( remove_query_arg( 'approve_job', add_query_arg( 'handled_jobs', $post_id, add_query_arg( 'action_performed', 'approve_jobs', admin_url( 'edit.php?post_type=job_listing' ) ) ) ) );
+			wp_safe_redirect( remove_query_arg( 'approve_job', add_query_arg( [ 'handled_jobs' => [ $post_id ] ], add_query_arg( 'action_performed', 'approve_jobs', admin_url( 'edit.php?post_type=job_listing' ) ) ) ) );
 			exit;
 		}
 	}
@@ -545,39 +545,7 @@ class WP_Job_Manager_CPT {
 			unset( $actions['inline hide-if-no-js'] );
 			unset( $actions['trash'] );
 
-			$admin_actions = [];
-
-			if ( in_array( $post->post_status, [ 'pending', 'pending_payment' ], true ) && current_user_can( 'publish_post', $post->ID ) ) {
-				$admin_actions['approve'] = [
-					'action' => 'approved',
-					'name'   => __( 'Approve', 'wp-job-manager' ),
-					'url'    => wp_nonce_url( add_query_arg( 'approve_job', $post->ID ), 'approve_job' ),
-				];
-			}
-			if ( 'trash' !== $post->post_status ) {
-				if ( current_user_can( 'read_post', $post->ID ) ) {
-					$admin_actions['view'] = [
-						'action' => 'view',
-						'name'   => __( 'View', 'wp-job-manager' ),
-						'url'    => get_permalink( $post->ID ),
-					];
-				}
-				if ( current_user_can( 'edit_post', $post->ID ) ) {
-					$admin_actions['edit'] = [
-						'action' => 'edit',
-						'name'   => __( 'Edit', 'wp-job-manager' ),
-						'url'    => get_edit_post_link( $post->ID ),
-					];
-				}
-				if ( current_user_can( 'delete_post', $post->ID ) ) {
-					$admin_actions['delete'] = [
-						'action' => 'delete',
-						'name'   => __( 'Delete', 'wp-job-manager' ),
-						'url'    => get_delete_post_link( $post->ID ),
-					];
-				}
-			}
-			$admin_actions = apply_filters( 'job_manager_admin_actions', $admin_actions, $post );
+			$admin_actions = $this->get_admin_actions( $post );
 
 			foreach ( $admin_actions as $action ) {
 				$actions[ $action['action'] ] = '<a href="' . esc_url( $action['url'] ) . '" title="" rel="permalink">' . esc_html( $action['name'] ) . '</a>';
@@ -585,6 +553,49 @@ class WP_Job_Manager_CPT {
 		}
 
 		return $actions;
+	}
+
+	/**
+	 * Get the admin actions for a job listing.
+	 *
+	 * @param \WP_Post $post
+	 *
+	 * @return array
+	 */
+	public function get_admin_actions( $post ) {
+		$admin_actions = [];
+
+		if ( in_array( $post->post_status, [ 'pending', 'pending_payment' ], true ) && current_user_can( 'publish_post', $post->ID ) ) {
+			$admin_actions['approve'] = [
+				'action' => 'approved',
+				'name'   => __( 'Approve', 'wp-job-manager' ),
+				'url'    => wp_nonce_url( add_query_arg( 'approve_job', $post->ID ), 'approve_job' ),
+			];
+		}
+		if ( 'trash' !== $post->post_status ) {
+			if ( current_user_can( 'read_post', $post->ID ) ) {
+				$admin_actions['view'] = [
+					'action' => 'view',
+					'name'   => __( 'View', 'wp-job-manager' ),
+					'url'    => get_permalink( $post->ID ),
+				];
+			}
+			if ( current_user_can( 'edit_post', $post->ID ) ) {
+				$admin_actions['edit'] = [
+					'action' => 'edit',
+					'name'   => __( 'Edit', 'wp-job-manager' ),
+					'url'    => get_edit_post_link( $post->ID ),
+				];
+			}
+			if ( current_user_can( 'delete_post', $post->ID ) ) {
+				$admin_actions['delete'] = [
+					'action' => 'delete',
+					'name'   => __( 'Delete', 'wp-job-manager' ),
+					'url'    => get_delete_post_link( $post->ID ),
+				];
+			}
+		}
+		return apply_filters( 'job_manager_admin_actions', $admin_actions, $post );
 	}
 
 	/**

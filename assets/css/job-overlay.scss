@@ -79,6 +79,10 @@
 		flex-wrap: wrap;
 	}
 
+	&:empty {
+		display: none;
+	}
+
 }
 
 .jm-job-overlay-details-box {

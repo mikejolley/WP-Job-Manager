@@ -35,8 +35,8 @@ class Stats_Dashboard {
 		add_filter( 'job_manager_job_dashboard_columns', [ $this, 'add_stats_column' ] );
 		add_action( 'job_manager_job_dashboard_column_' . self::COLUMN_NAME, [ $this, 'render_stats_column' ] );
 
-		add_filter( 'manage_edit-job_listing_columns', [ $this, 'add_stats_column' ], 20 );
-		add_action( 'manage_job_listing_posts_custom_column', [ $this, 'maybe_render_job_listing_posts_custom_column' ], 2 );
+		add_filter( 'manage_edit-job_listing_columns', [ $this, 'add_stats_column' ] );
+		add_action( 'manage_job_listing_posts_custom_column', [ $this, 'maybe_render_admin_stats_column' ], 2 );
 
 		add_action( 'job_manager_job_overlay_content', [ $this, 'output_job_stats' ], 12 );
 	}
@@ -77,11 +77,13 @@ class Stats_Dashboard {
 	 *
 	 * @param string $column
 	 */
-	public function maybe_render_job_listing_posts_custom_column( $column ) {
+	public function maybe_render_admin_stats_column( $column ) {
 		global $post;
 
-		if ( self::COLUMN_NAME === $column ) {
+		if ( self::COLUMN_NAME === $column && ! empty( $post->ID ) ) {
+			echo '<a href="#' . esc_attr( $post->ID ) . ' ">';
 			$this->render_stats_column( $post );
+			echo '</a>';
 		}
 	}
 
