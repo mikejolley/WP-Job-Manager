@@ -29,11 +29,11 @@
 				<referencedClass name="WP_CLI" />
 			</errorLevel>
 		</UndefinedClass>
-		<InvalidScalarArgument>
+		<InvalidArgument>
 			<errorLevel type="suppress">
 				<referencedFunction name="esc_attr" />
 			</errorLevel>
-		</InvalidScalarArgument>
+		</InvalidArgument>
 	</issueHandlers>
 	<stubs>
 		<file name="wp-job-manager.php" />
