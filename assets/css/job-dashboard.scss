@@ -96,6 +96,10 @@
 .jm-dashboard-job-column.actions {
 	flex: 0.5 1 100%;
 	text-align: right;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: var(--jm-ui-space-m);
 }
 
 .jm-dashboard-job-column a.job-title {
@@ -112,8 +116,12 @@
 .jm-dashboard-action {
 	display: block;
 	text-decoration: none;
-
 }
+.jm-dashboard-action--primary {
+	flex-basis: fit-content;
+	white-space: nowrap;
+}
+
 .jm-dashboard-action:where(:not(:hover):not(:focus)) {
 	color: inherit;
 }
@@ -126,12 +134,16 @@
 {
 	.jm-dashboard-job {
 		flex-wrap: wrap;
+		align-items: flex-start;
 	}
 
 	.jm-dashboard-header {
 		display: none;
 	}
 
+	.jm-dashboard-job-column.actions {
+		justify-content: space-between;
+	}
 
 	.jm-dashboard-job-column.company ~ .jm-dashboard-job-column.job_title {
 		flex-basis: calc( 100% - var(--jm-dashboard-company-logo-size) - var(--jm-ui-space-sm) );

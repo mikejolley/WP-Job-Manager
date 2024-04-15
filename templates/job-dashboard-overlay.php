@@ -60,25 +60,33 @@ $submit_job_form_page_id = get_option( 'job_manager_submit_job_form_page_id' );
 	</div>
 	<div class="jm-job-overlay-footer">
 		<?php
-		$actions_html = '';
+		$buttons = [];
+		$actions = [];
 		if ( ! empty( $job_actions ) ) {
-			foreach ( $job_actions as $action => $value ) {
-				$action_url = add_query_arg( [
-					'action' => $action,
-					'job_id' => $job->ID,
-				], '' );
-				if ( $value['nonce'] ) {
-					$action_url = wp_nonce_url( $action_url, $value['nonce'] );
+			$primary = Job_Dashboard_Shortcode::get_primary_action( $job, $job_actions );
+
+			if ( $primary ) {
+				$buttons[] = [
+					'label' => $primary['label'],
+					'url'   => $primary['url'],
+					'class' => 'job-dashboard-action-' . esc_attr( $primary['name'] ),
+					'primary' => false,
+				];
+			}
+
+			foreach ( $job_actions as $action ) {
+				if ( ! empty( $primary ) && $primary['name'] === $action['name'] ) {
+					continue;
 				}
 				$actions[] = [
-					'label' => $value['label'],
-					'url'   => $action_url,
-					'class' => 'job-dashboard-action-' . esc_attr( $action ),
+					'label' => $action['label'],
+					'url'   => $action['url'],
+					'class' => 'job-dashboard-action-' . esc_attr( $action['name'] ),
 				];
 			}
 		}
 
-		echo UI_Elements::actions( [], $actions );
+		echo UI_Elements::actions( $buttons, $actions );
 		?>
 	</div>
 </div>

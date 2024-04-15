@@ -60,6 +60,7 @@ class Job_Dashboard_Shortcode {
 		add_action( 'job_manager_job_dashboard_columns', [ $this, 'maybe_display_company_column' ], 8 );
 		add_action( 'job_manager_job_dashboard_column_job_title', [ self::class, 'the_job_title' ], 10 );
 		add_action( 'job_manager_job_dashboard_column_job_title', [ self::class, 'the_status' ], 12 );
+		add_action( 'job_manager_job_dashboard_column_actions', [ self::class, 'the_primary_action' ], 10, 2 );
 
 		Job_Overlay::instance();
 	}
@@ -260,13 +261,65 @@ class Job_Dashboard_Shortcode {
 		$actions = apply_filters( 'job_manager_my_job_actions', $actions, $job );
 
 		// For backwards compatibility, convert `nonce => true` to the nonce action name.
-		foreach ( $actions as $key => $action ) {
+		foreach ( $actions as $key => &$action ) {
 			if ( true === $action['nonce'] ) {
-				$actions[ $key ]['nonce'] = $base_nonce_action_name;
+				$action['nonce'] = $base_nonce_action_name;
 			}
+
+			$action_url = add_query_arg(
+				[
+					'action' => $key,
+					'job_id' => $job->ID,
+				],
+				'?'
+			);
+
+			if ( $action['nonce'] ) {
+				$action_url = wp_nonce_url( $action_url, $action['nonce'] );
+			}
+
+			$action['name'] = $key;
+			$action['url']  = $action_url;
 		}
 
 		return $actions;
+	}
+
+	/**
+	 * Determine the highlighted primary action for a job.
+	 *
+	 * @param \WP_Post $job The job.
+	 * @param array    $actions Available job action.
+	 *
+	 * @return array|false
+	 */
+	public static function get_primary_action( $job, $actions ) {
+
+		$action_order = [
+			'mark_filled',
+			'renew',
+			'relist',
+			'continue',
+			'edit',
+			'delete',
+			'duplicate',
+			'mark_not_filled',
+		];
+
+		$primary_action = false;
+
+		foreach ( $action_order as $action ) {
+			if ( isset( $actions[ $action ] ) ) {
+				$primary_action = $actions[ $action ];
+				break;
+			}
+		}
+
+		/**
+		 * Filter the highlighted primary action for a job on the job dashboard page.
+		 */
+		return apply_filters( 'job_manager_my_job_primary_action', $primary_action, $job, $actions );
+
 	}
 
 	/**
@@ -529,6 +582,31 @@ class Job_Dashboard_Shortcode {
 	 */
 	public static function the_date( $job ) {
 		echo '<div>' . esc_html( wp_date( apply_filters( 'job_manager_get_dashboard_date_format', 'M d, Y' ), get_post_datetime( $job )->getTimestamp() ) ) . '</div>';
+	}
+
+	/**
+	 * Show the primary action as a button.
+	 *
+	 * @param \WP_Post $job The job post.
+	 * @param array    $actions Available actions.
+	 *
+	 * @output string
+	 */
+	public static function the_primary_action( $job, $actions ) {
+		$action = self::get_primary_action( $job, $actions );
+
+		if ( ! $action ) {
+			return;
+		}
+
+		echo UI_Elements::button(
+			[
+				'label' => $action['label'],
+				'url'   => $action['url'],
+				'class' => 'job-dashboard-action-' . esc_attr( $action['name'] ) . ' jm-dashboard-action jm-dashboard-action--primary jm-ui-button--small',
+			],
+			'jm-ui-button--outline'
+		);
 	}
 
 	/**
