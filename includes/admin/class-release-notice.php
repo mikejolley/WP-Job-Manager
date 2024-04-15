@@ -50,7 +50,6 @@ class Release_Notice {
 			'type'          => 'site-wide',
 			'label'         => 'New',
 			'heading'       => 'Job Statistics',
-
 			'message'       => '<div>' . __(
 				'
 <p>Collect analytics about site visitors for each job listing. Display the detailed statistics in the refreshed jobs dashboard.</p>
