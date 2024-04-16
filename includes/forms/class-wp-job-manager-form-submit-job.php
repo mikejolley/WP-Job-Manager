@@ -80,7 +80,11 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 		WP_Job_Manager_Helper_Renewals::instance( $this );
 
 		// Recaptcha support.
-		WP_Job_Manager\WP_Job_Manager_Recaptcha::instance();
+		WP_Job_Manager\WP_Job_Manager_Recaptcha::instance()->maybe_enable_recaptcha(
+			'job_manager_enable_recaptcha_job_submission',
+			[ 'submit_job_form_end' ],
+			[ 'submit_job_form_validate_fields', 'submit_draft_job_form_validate_fields' ]
+		);
 
 		if ( $this->use_agreement_checkbox() ) {
 			add_action( 'submit_job_form_end', [ $this, 'display_agreement_checkbox_field' ] );
