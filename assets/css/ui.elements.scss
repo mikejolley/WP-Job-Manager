@@ -1,4 +1,16 @@
 
+.jm-ui-row {
+	display: flex;
+	gap: var(--jm-ui-space-xs);
+	align-items: center;
+}
+
+.jm-ui-col {
+	display: flex;
+	flex-direction: column;
+	gap: var(--jm-ui-space-xs);
+}
+
 .jm-ui-button,
 .jm-ui-button--outline,
 .jm-ui-button--link,
@@ -25,8 +37,13 @@
 	font-size: var(--jm-ui-button-font-size);
 	font-weight: 400;
 	letter-spacing: -0.1px;
+	white-space: nowrap;
 
 	transition: color 0.2s ease-out, background 0.2s ease-out;
+
+	&:focus:not(:focus-visible) {
+		outline: unset;
+	}
 
 	&:focus-visible {
 		outline: 1.5px solid fadeCurrentColor(85%);
@@ -48,6 +65,15 @@
 			background-color: color-mix(in srgb, #fff, currentColor 85%);
 		}
 	}
+}
+
+.jm-ui-button--small,
+{
+	padding: var(--jm-ui-space-xxs) var(--jm-ui-space-s);
+	gap: var(--jm-ui-space-xs);
+	font-size: var(--jm-ui-font-size-s);
+	font-weight: 400;
+	letter-spacing: -0.1px;
 }
 
 .jm-ui-button__a {
@@ -90,6 +116,13 @@
 	}
 }
 
+.jm-ui-button__icon {
+	background-color: currentColor;
+	mask: var(--jm-ui-svg-close) no-repeat center center;
+	width: var(--jm-ui-icon-size);
+	height: var(--jm-ui-icon-size);
+}
+
 .jm-ui-link {
 	border-radius: 2px;
 
@@ -102,7 +135,7 @@
 	}
 }
 
-.jm-ui-actions {
+.jm-ui-actions-row {
 	display: flex;
 	flex-direction: row;
 	gap: var(--jm-ui-space-s);
@@ -115,3 +148,140 @@
 		margin-left: calc(-1 * var(--jm-ui-space-s));
 	}
 }
+
+.jm-ui-icon {
+	display: inline-block;
+	flex: 0 0 auto;
+	width: var(--jm-ui-icon-size);
+	height: var(--jm-ui-icon-size);
+	mask-size: 100% 100%;
+
+	&:where(:not(.jm-ui-icon--svg)) {
+		background-color: currentColor;
+		mask-image: url('data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' fill=\'none\' viewBox=\'0 0 24 24\'%3e%3cpath stroke=\'black\' stroke-dasharray=\'4 4\' stroke-width=\'1.5\' d=\'M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z\'/%3e%3c/svg%3e');
+	}
+
+	&[data-icon=check] {
+		mask-image: var(--jm-ui-svg-check);
+	}
+
+	&[data-icon=check-circle] {
+		mask-image:  url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3e%3cg stroke-width='1.5'%3e%3cpath stroke='black' d='M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z'/%3e%3cpath stroke='black' d='m15.96 8.18-5.34 7.18-3.1-2.3'/%3e%3c/g%3e%3c/svg%3e");
+	}
+
+	&[data-icon=star] {
+		mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3e%3cpath fill='black' d='M11.78 4.45a.25.25 0 0 1 .44 0l2.07 4.2c.04.07.11.12.2.13l4.62.68c.2.02.28.28.14.42l-3.35 3.26a.25.25 0 0 0-.07.23l.79 4.6c.03.2-.18.36-.37.27l-4.13-2.18a.25.25 0 0 0-.24 0l-4.13 2.18a.25.25 0 0 1-.37-.27l.8-4.6a.25.25 0 0 0-.08-.23L4.75 9.88a.25.25 0 0 1 .14-.42l4.63-.68a.25.25 0 0 0 .19-.13l2.07-4.2Z'/%3e%3c/svg%3e");
+	}
+
+	&[data-icon=info] {
+		mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3e%3ccircle cx='12' cy='12' r='8' stroke='black' stroke-width='1.5'/%3e%3cpath fill='black' d='M11 11h2v6h-2zm0-4h2v2h-2z'/%3e%3c/svg%3e");
+	}
+
+	&[data-icon=alert] {
+		mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3e%3cpath stroke='black' stroke-width='1.5' d='M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z'/%3e%3cpath fill='black' d='M13 7h-2v6h2V7Zm0 8h-2v2h2v-2Z'/%3e%3c/svg%3e");
+	}
+
+	&[data-icon=location] {
+		mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3e%3cpath fill='black' d='M12 9c-.8 0-1.5.7-1.5 1.5S11.2 12 12 12s1.5-.7 1.5-1.5S12.8 9 12 9Zm0-5c-3.6 0-6.5 2.8-6.5 6.2 0 .8.3 1.8.9 3.1.5 1.1 1.2 2.3 2 3.6.7 1 3 3.8 3.2 3.9l.4.5.4-.5c.2-.2 2.6-2.9 3.2-3.9.8-1.2 1.5-2.5 2-3.6.6-1.3.9-2.3.9-3.1C18.5 6.8 15.6 4 12 4Zm4.3 8.7c-.5 1-1.1 2.2-1.9 3.4-.5.7-1.7 2.2-2.4 3-.7-.8-1.9-2.3-2.4-3-.8-1.2-1.4-2.3-1.9-3.3-.6-1.4-.7-2.2-.7-2.5 0-2.6 2.2-4.7 5-4.7s5 2.1 5 4.7c0 .2-.1 1-.7 2.4Z'/%3e%3c/svg%3e");
+	}
+
+	&[data-icon=edit] {
+		mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3e%3cpath fill='black' d='m19 7-3-3-8.5 8.5-1 4 4-1L19 7Zm-7 11.5H5V20h7v-1.5Z'/%3e%3c/svg%3e");
+	}
+
+	&[data-icon=search] {
+		mask-image: var(--jm-ui-svg-search);
+	}
+
+	&[data-icon=help] {
+		mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3e%3cpath stroke='black' stroke-width='1.5' d='M9.75 10.25a2.25 2.25 0 1 1 2.5 2.24.27.27 0 0 0-.25.26V14m0 1v1.5m8-4.5a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z'/%3e%3c/svg%3e");
+	}
+}
+
+.jm-ui-marker-dot {
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background-color: currentColor;
+}
+
+/*
+ * Action menu.
+ */
+.jm-ui-actions-menu {
+	position: relative;
+	display: inline-block;
+}
+
+.jm-ui-action-menu__open-button {
+	cursor: pointer;
+	&::-webkit-details-marker {
+		display: none;
+	}
+
+	.jm-ui-button__icon {
+		mask-image: var(--jm-ui-svg-ellipsis-v);
+	}
+}
+
+.jm-ui-action-menu__content {
+	position: absolute;
+	right: 0;
+	top: calc(100% + 2px);
+	border: var(--jm-ui-border-size) solid var(--jm-ui-border-strong);
+	border-radius: var(--jm-ui-radius);
+	background-color: var(--jm-ui-background-color, #fff);
+	box-shadow: var(--jm-ui-shadow-popover);
+	padding: var(--jm-ui-space-s);
+	z-index: 10;
+	font-size: var(--jm-ui-font-size-s);
+	text-align: left;
+	white-space: nowrap;
+
+	display: flex;
+	flex-direction: column;
+}
+
+.jm-ui-spinner {
+	display: inline-block;
+	--size: 24px;
+	width: var(--size);
+	height: var(--size);
+	border: 2px solid currentColor;
+	border-bottom-color: transparent;
+	border-radius: 50%;
+	animation: jm-ui-spinner-spin 1s linear infinite;
+}
+
+@keyframes jm-ui-spinner-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.jm-ui-tooltip {
+	font-size: var(--jm-ui-font-size-s);
+	position: absolute;
+	color: var(--jm-ui-background-color, #fff);
+	background-color: var(--jm-ui-text-color, #1a1a1a);
+	padding: var(--jm-ui-space-s);
+	border-radius: var(--jm-ui-radius);
+	top: calc(100% + 6px);
+	width: max-content;
+	min-width: 18rem;
+	z-index: 1;
+	left: -2rem;
+}
+
+.jm-ui-has-tooltip {
+	position: relative;
+}
+
+.jm-ui-has-tooltip:not(:hover):not(:active):not(:focus) .jm-ui-tooltip {
+	display: none;
+}
+

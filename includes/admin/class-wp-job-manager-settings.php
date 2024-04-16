@@ -83,13 +83,23 @@ class WP_Job_Manager_Settings {
 	}
 
 	/**
+	 * Set a single setting.
+	 *
+	 * @param string $option Option name.
+	 * @param mixed  $value Value.
+	 */
+	public function set_setting( $option, $value ) {
+		update_option( $option, $value );
+	}
+
+	/**
 	 * Initializes the configuration for the plugin's setting fields.
 	 *
 	 * @access protected
 	 */
 	protected function init_settings() {
 		// Prepare roles option.
-		$roles         = get_editable_roles();
+		$roles         = function_exists( 'get_editable_roles' ) ? get_editable_roles() : [];
 		$account_roles = [];
 
 		foreach ( $roles as $key => $role ) {
@@ -115,6 +125,17 @@ class WP_Job_Manager_Settings {
 								'relative' => __( 'Relative to the current date (e.g., 1 day, 1 week, 1 month ago)', 'wp-job-manager' ),
 								'default'  => __( 'Default date format as defined in Settings', 'wp-job-manager' ),
 							],
+							'track'   => 'value',
+						],
+						[
+							'name'       => \WP_Job_Manager\Stats::OPTION_ENABLE_STATS,
+							'std'        => '0',
+							'label'      => __( 'Job Statistics', 'wp-job-manager' ),
+							'cb_label'   => __( 'Enable job statistics', 'wp-job-manager' ),
+							'desc'       => __( 'Collect anonymous visitor data about job listings (page views, search impressions), and show them in the job dashboard.', 'wp-job-manager' ),
+							'type'       => 'checkbox',
+							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_google_maps_api_key',
@@ -128,10 +149,11 @@ class WP_Job_Manager_Settings {
 							'name'       => 'job_manager_delete_data_on_uninstall',
 							'std'        => '0',
 							'label'      => __( 'Delete Data On Uninstall', 'wp-job-manager' ),
-							'cb_label'   => __( 'Delete WP Job Manager data when the plugin is deleted. Once the plugin is uninstalled, only job listings can be restored (30 days).', 'wp-job-manager' ),
+							'cb_label'   => __( 'Delete Job Manager data when the plugin is deleted. Once the plugin is uninstalled, only job listings can be restored (30 days).', 'wp-job-manager' ),
 							'desc'       => '',
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_bypass_trash_on_uninstall',
@@ -141,6 +163,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => '',
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 					],
 				],
@@ -154,6 +177,7 @@ class WP_Job_Manager_Settings {
 							'label'       => __( 'Listings Per Page', 'wp-job-manager' ),
 							'desc'        => __( 'Number of job listings to display per page.', 'wp-job-manager' ),
 							'attributes'  => [],
+							'track'       => 'value',
 						],
 						[
 							'name'    => 'job_manager_job_listing_pagination_type',
@@ -165,6 +189,7 @@ class WP_Job_Manager_Settings {
 								'load_more'  => __( 'Load More Listings button', 'wp-job-manager' ),
 								'pagination' => __( 'Page numbered links', 'wp-job-manager' ),
 							],
+							'track'   => 'value',
 						],
 						[
 							'name'       => 'job_manager_hide_filled_positions',
@@ -174,6 +199,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'Filled job listings will not be included in search results, sitemap and feeds.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_hide_expired',
@@ -183,6 +209,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'Expired job listings will not be shown to the users on the job board.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_hide_expired_content',
@@ -192,6 +219,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'Your site will display the titles of expired listings, but not the content of the listings. Otherwise, expired listings display their full content minus the application area.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_enable_categories',
@@ -201,6 +229,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'This lets users select from a list of categories when submitting a job. Note: an admin has to create categories before site users can select them.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_enable_default_category_multiselect',
@@ -210,6 +239,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'The category selection box will default to allowing multiple selections on the [jobs] shortcode. Without this, visitors will only be able to select a single category when filtering jobs.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'    => 'job_manager_category_filter_type',
@@ -221,6 +251,7 @@ class WP_Job_Manager_Settings {
 								'any' => __( 'Jobs will be shown if within ANY selected category', 'wp-job-manager' ),
 								'all' => __( 'Jobs will be shown if within ALL selected categories', 'wp-job-manager' ),
 							],
+							'track'   => 'value',
 						],
 						[
 							'name'       => 'job_manager_enable_types',
@@ -230,6 +261,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'This lets users select from a list of types when submitting a job. Note: an admin has to create types before site users can select them.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_multi_job_type',
@@ -239,6 +271,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'This allows users to select more than one type when submitting a job. The metabox on the post editor and the selection box on the front-end job submission form will both reflect this.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_enable_remote_position',
@@ -248,6 +281,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'This lets users select if the listing is a remote position when submitting a job.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_enable_salary',
@@ -257,6 +291,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'This lets users add a salary when submitting a job.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_enable_salary_currency',
@@ -266,6 +301,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'This lets users add a salary currency when submitting a job.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'        => 'job_manager_default_salary_currency',
@@ -276,6 +312,7 @@ class WP_Job_Manager_Settings {
 							'type'        => 'text',
 							'placeholder' => __( 'e.g. USD', 'wp-job-manager' ),
 							'attributes'  => [],
+							'track'       => 'value',
 						],
 						[
 							'name'       => 'job_manager_enable_salary_unit',
@@ -285,6 +322,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'This lets users add a salary unit when submitting a job.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_default_salary_unit',
@@ -295,6 +333,7 @@ class WP_Job_Manager_Settings {
 							'type'       => 'select',
 							'options'    => job_manager_get_salary_unit_options(),
 							'attributes' => [],
+							'track'      => 'value',
 						],
 						[
 							'name'     => 'job_manager_display_location_address',
@@ -303,6 +342,7 @@ class WP_Job_Manager_Settings {
 							'cb_label' => __( 'Display Location Address', 'wp-job-manager' ),
 							'desc'     => __( 'Display the full address of the job listing location if it is detected by Google Maps Geocoding API. If full address is not available then it will display whatever text the user submitted for the location.', 'wp-job-manager' ),
 							'type'     => 'checkbox',
+							'track'    => 'bool',
 						],
 						[
 							'name'     => 'job_manager_strip_job_description_shortcodes',
@@ -311,6 +351,7 @@ class WP_Job_Manager_Settings {
 							'cb_label' => __( 'Strip shortcodes from Job description', 'wp-job-manager' ),
 							'desc'     => __( 'If enabled, shortcodes will be stripped from the job description on the single job listing page.', 'wp-job-manager' ),
 							'type'     => 'checkbox',
+							'track'    => 'bool',
 						],
 					],
 				],
@@ -325,6 +366,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'Limits job listing submissions to registered, logged-in users.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_enable_registration',
@@ -334,6 +376,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'Includes account creation on the listing submission form, to allow non-registered users to create an account and submit a job listing simultaneously.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 
@@ -344,6 +387,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'Allow employers to set a date in the future for the listing to publish.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_generate_username_from_email',
@@ -353,6 +397,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'Automatically generates usernames for new accounts from the registrant\'s email address. If this is not enabled, a "username" field will display instead.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_use_standard_password_setup_email',
@@ -362,6 +407,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'Sends an email to the user with their username and a link to set their password. If this is not enabled, a "password" field will display instead, and their email address won\'t be verified.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'    => 'job_manager_registration_role',
@@ -370,6 +416,7 @@ class WP_Job_Manager_Settings {
 							'desc'    => __( 'Any new accounts created during submission will have this role. If you haven\'t enabled account creation during submission in the options above, your own method of assigning roles will apply.', 'wp-job-manager' ),
 							'type'    => 'select',
 							'options' => $account_roles,
+							'track'   => 'value',
 						],
 						[
 							'name'       => 'job_manager_submission_requires_approval',
@@ -379,6 +426,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'Sets all new submissions to "pending." They will not appear on your site until an admin approves them.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_user_can_edit_pending_submissions',
@@ -388,6 +436,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'Users can continue to edit pending listings until they are approved by an admin.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 						[
 							'name'       => 'job_manager_user_edit_published_submissions',
@@ -402,6 +451,7 @@ class WP_Job_Manager_Settings {
 								'yes_moderated' => __( 'Users can edit, but edits require admin approval', 'wp-job-manager' ),
 							],
 							'attributes' => [],
+							'track'      => 'value',
 						],
 						[
 							'name'              => 'job_manager_submission_duration',
@@ -412,6 +462,7 @@ class WP_Job_Manager_Settings {
 							'attributes'        => [],
 							'sanitize_callback' => [ $this, 'sanitize_submission_duration' ],
 							'placeholder'       => __( 'No limit', 'wp-job-manager' ),
+							'track'             => 'value',
 						],
 						[
 							'name'              => 'job_manager_renewal_days',
@@ -421,6 +472,7 @@ class WP_Job_Manager_Settings {
 							'type'              => 'number',
 							'attributes'        => [],
 							'sanitize_callback' => [ $this, 'sanitize_renewal_days' ],
+							'track'             => 'value',
 						],
 						[
 							'name'              => 'job_manager_submission_limit',
@@ -431,6 +483,7 @@ class WP_Job_Manager_Settings {
 							'attributes'        => [],
 							'sanitize_callback' => [ $this, 'sanitize_submission_limit' ],
 							'placeholder'       => __( 'No limit', 'wp-job-manager' ),
+							'track'             => 'value',
 						],
 						[
 							'name'    => 'job_manager_allowed_application_method',
@@ -443,6 +496,7 @@ class WP_Job_Manager_Settings {
 								'email' => __( 'Email addresses only', 'wp-job-manager' ),
 								'url'   => __( 'Website URLs only', 'wp-job-manager' ),
 							],
+							'track'   => 'value',
 						],
 						[
 							'name'       => 'job_manager_show_agreement_job_submission',
@@ -452,6 +506,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => __( 'Require a Terms and Conditions checkbox to be marked before a job can be submitted. The linked page can be set from the <a href="#settings-job_pages" class="nav-internal">Pages</a> settings tab.', 'wp-job-manager' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 					],
 				],
@@ -477,6 +532,7 @@ class WP_Job_Manager_Settings {
 								'v2' => __( 'reCaptcha v2', 'wp-job-manager' ),
 								'v3' => __( 'reCaptcha v3', 'wp-job-manager' ),
 							],
+							'track'       => 'value',
 						],
 						[
 							'name'        => 'job_manager_recaptcha_site_key',
@@ -504,6 +560,7 @@ class WP_Job_Manager_Settings {
 							'desc'       => sprintf( __( 'This will help prevent bots from submitting job listings. You must have entered a valid site key and secret key above.', 'wp-job-manager' ), 'https://www.google.com/recaptcha/admin#list' ),
 							'type'       => 'checkbox',
 							'attributes' => [],
+							'track'      => 'bool',
 						],
 					],
 				],
@@ -516,6 +573,7 @@ class WP_Job_Manager_Settings {
 							'label' => __( 'Submit Job Form Page', 'wp-job-manager' ),
 							'desc'  => __( 'Select the page where you\'ve used the [submit_job_form] shortcode. This lets the plugin know the location of the form.', 'wp-job-manager' ),
 							'type'  => 'page',
+							'track' => 'bool',
 						],
 						[
 							'name'  => 'job_manager_job_dashboard_page_id',
@@ -523,6 +581,7 @@ class WP_Job_Manager_Settings {
 							'label' => __( 'Job Dashboard Page', 'wp-job-manager' ),
 							'desc'  => __( 'Select the page where you\'ve used the [job_dashboard] shortcode. This lets the plugin know the location of the dashboard.', 'wp-job-manager' ),
 							'type'  => 'page',
+							'track' => 'bool',
 						],
 						[
 							'name'  => 'job_manager_jobs_page_id',
@@ -530,6 +589,7 @@ class WP_Job_Manager_Settings {
 							'label' => __( 'Job Listings Page', 'wp-job-manager' ),
 							'desc'  => __( 'Select the page where you\'ve used the [jobs] shortcode. This lets the plugin know the location of the job listings page.', 'wp-job-manager' ),
 							'type'  => 'page',
+							'track' => 'bool',
 						],
 						[
 							'name'  => 'job_manager_terms_and_conditions_page_id',
@@ -537,6 +597,7 @@ class WP_Job_Manager_Settings {
 							'label' => __( 'Terms and Conditions Page', 'wp-job-manager' ),
 							'desc'  => __( 'Select the page to link when "Terms and Conditions Checkbox" is enabled. See setting in "Job Submission" tab.', 'wp-job-manager' ),
 							'type'  => 'page',
+							'track' => 'bool',
 						],
 					],
 				],
@@ -551,6 +612,7 @@ class WP_Job_Manager_Settings {
 							'sanitize_callback' => [ $this, 'sanitize_capabilities' ],
 							// translators: Placeholder %s is the url to the WordPress core documentation for capabilities and roles.
 							'desc'              => sprintf( __( 'Enter which <a href="%s">roles or capabilities</a> allow visitors to browse job listings. If no value is selected, everyone (including logged out guests) will be able to browse job listings.', 'wp-job-manager' ), 'http://codex.wordpress.org/Roles_and_Capabilities' ),
+							'track'             => 'bool',
 						],
 						[
 							'name'              => 'job_manager_view_job_listing_capability',
@@ -560,6 +622,7 @@ class WP_Job_Manager_Settings {
 							'sanitize_callback' => [ $this, 'sanitize_capabilities' ],
 							// translators: Placeholder %s is the url to the WordPress core documentation for capabilities and roles.
 							'desc'              => sprintf( __( 'Enter which <a href="%s">roles or capabilities</a> allow visitors to view a single job listing. If no value is selected, everyone (including logged out guests) will be able to view job listings.', 'wp-job-manager' ), 'http://codex.wordpress.org/Roles_and_Capabilities' ),
+							'track'             => 'bool',
 						],
 					],
 				],

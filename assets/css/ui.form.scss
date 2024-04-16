@@ -177,6 +177,13 @@
 		padding-right: var(--jm-ui-space-ml);
 	}
 
+	input[type].jm-ui-input--search-icon {
+		background-image: var(--jm-ui-svg-search);
+		background-position: var(--jm-ui-space-xs) center;
+		background-repeat: no-repeat;
+		padding-left: calc(var(--jm-ui-space-ml) + var(--jm-ui-space-xs));
+	}
+
 	.select2-container.select2-container.select2-container {
 
 		input {

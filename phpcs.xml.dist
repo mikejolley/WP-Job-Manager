@@ -67,6 +67,7 @@
 		<properties>
 			<property name="customEscapingFunctions" type="array">
 				<element value="wpjm_esc_json"/>
+				<element value="UI_Elements"/>
 			</property>
 		</properties>
 	</rule>

@@ -130,3 +130,8 @@ $temporary: #d93674;
 @function fadeCurrentColor( $opacity ) {
 	@return color-mix(in srgb, transparent, currentColor #{$opacity});
 }
+
+
+@function fluid($desktop, $mobile) {
+	@return calc(var(--jm-ui-responsive-scale) * (#{$desktop} - #{$mobile}) + #{$mobile}px);
+}

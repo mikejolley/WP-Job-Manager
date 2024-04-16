@@ -11,6 +11,7 @@ const files = {
 	'js/job-submission': 'js/job-submission.js',
 	'js/multiselect': 'js/multiselect.js',
 	'js/term-multiselect': 'js/term-multiselect.js',
+	'js/wpjm-stats': 'js/wpjm-stats.js',
 	'js/admin/job-editor': 'js/admin/job-editor.js',
 	'js/admin/wpjm-notice-dismiss': 'js/admin/wpjm-notice-dismiss.js',
 	'js/admin/job-tags-upsell': 'js/admin/job-tags-upsell.js',
@@ -22,6 +23,7 @@ const files = {
 	'css/ui': 'css/ui.scss',
 	'css/job-listings': 'css/job-listings.scss',
 	'css/job-submission': 'css/job-submission.scss',
+	'css/job-dashboard': 'css/job-dashboard.scss',
 	'css/setup': 'css/setup.scss',
 	'css/menu': 'css/menu.scss',
 };

@@ -32,7 +32,7 @@ class Notice {
 
 		return self::render(
 			array_merge(
-				[ 'icon' => 'check' ],
+				[ 'icon' => 'check-circle' ],
 				$args
 			)
 		);

@@ -22,7 +22,7 @@
 
 .jm-dialog {
 	font-size: var(--jm-ui-font-size);
-	--jm-local-notice-padding: var(--jm-ui-space-l);
+	--jm-dialog-padding: var(--jm-ui-space-l);
 }
 
 .jm-dialog .jm-notice {
@@ -30,7 +30,7 @@
 	border: unset;
 	width: 100%;
 	min-width: unset;
-	padding: var(--jm-local-notice-padding);
+	padding: var(--jm-dialog-padding);
 
 	.jm-notice__details {
 		align-self: stretch;
@@ -38,25 +38,36 @@
 }
 
 .jm-dialog::backdrop {
-	background-color: unset;
+	background-color: transparent;
+	backdrop-filter: blur(4px);
 }
 
 .jm-dialog-modal {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
 	width: var(--wp--style--global--content-size, 640px);
 	max-width: calc(100% - var(--jm-ui-space-s) * 2);
 	max-height: 100%;
 	margin: var(--jm-ui-space-s);
-	overflow: hidden;
 	border-radius: var(--jm-ui-radius-2x);
 	background-color: var(--jm-ui-background-color, #fff);
 	color: var(--jm-ui-text-color, #1a1a1a);
 	box-shadow: var(--jm-ui-shadow-modal);
+	overflow: auto;
+	overscroll-behavior: contain;
 
+}
+.jm-dialog-modal-container {
+	position: relative;
+	min-height: 100%;
+	display: flex;
+
+}
+
+.jm-dialog-modal-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
 }
 
 .jm-dialog-backdrop {
@@ -67,23 +78,19 @@
 	bottom: 0;
 	z-index: -1;
 	background-color: rgb(0 0 0 / 0.1);
-	backdrop-filter: blur(4px);
+
 }
 
 .jm-dialog-close {
 	position: absolute;
 	z-index: 1;
-	padding: var(--jm-ui-space-xxxs);
-	top: calc(var(--jm-local-notice-padding) - var(--jm-ui-space-xxxs));
-	right: calc(var(--jm-local-notice-padding) - var(--jm-ui-space-xxxs) - 8px);
+	top: calc(var(--jm-dialog-padding) - var(--jm-ui-space-xs));
+	right: calc(var(--jm-dialog-padding) - var(--jm-ui-space-xs) - 8px);
 	cursor: pointer;
 	opacity: 0.7;
 
 	.jm-ui-button__icon {
-		background-color: currentColor;
-		mask: var(--jm-ui-svg-close) no-repeat center center;
-		width: var(--jm-ui-icon-size);
-		height: var(--jm-ui-icon-size);
+		mask-image: var(--jm-ui-svg-close);
 	}
 
 }
@@ -92,7 +99,7 @@
 	animation: jm-dialog-open 0.2s cubic-bezier(.08, .6, .5, .98);
 }
 
-.jm-dialog[open]::backdrop {
+.jm-dialog[open] .jm-dialog-backdrop {
 	animation: jm-dialog-backdrop-fade-in 0.2s cubic-bezier(.08, .6, .5, .98);
 }
 
@@ -162,7 +169,7 @@
 	}
 
 	.jm-dialog {
-		--jm-local-notice-padding: var(--jm-ui-space-sm);
+		--jm-dialog-padding: var(--jm-ui-space-sm);
 	}
 
 	.jm-dialog .jm-form, .jm-dialog .jm-notice {

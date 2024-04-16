@@ -55,11 +55,6 @@
       <code>COOKIE_DOMAIN</code>
     </UndefinedConstant>
   </file>
-  <file src="includes/admin/class-notices-conditions-checker.php">
-    <MissingFile>
-      <code><![CDATA[require_once ABSPATH . 'wp-admin/includes/plugin.php']]></code>
-    </MissingFile>
-  </file>
   <file src="includes/admin/class-wp-job-manager-admin-notices.php">
     <InternalClass>
       <code>new Notices_Conditions_Checker()</code>
@@ -79,9 +74,6 @@
       <code>WP_Job_manager</code>
       <code>WP_Job_manager</code>
     </InvalidClass>
-    <ParadoxicalCondition>
-      <code><![CDATA[! defined( 'ABSPATH' )]]></code>
-    </ParadoxicalCondition>
   </file>
   <file src="includes/admin/class-wp-job-manager-cpt.php">
     <InvalidArgument>
@@ -115,6 +107,9 @@
     <NullArgument>
       <code>null</code>
     </NullArgument>
+    <ParadoxicalCondition>
+      <code><![CDATA[! defined( 'ABSPATH' )]]></code>
+    </ParadoxicalCondition>
     <UndefinedDocblockClass>
       <code>stirng|int</code>
     </UndefinedDocblockClass>
@@ -221,7 +216,6 @@
   <file src="includes/class-wp-job-manager-post-types.php">
     <InvalidArgument>
       <code>$job_data</code>
-      <code>$pending_jobs</code>
       <code><![CDATA[[
 				apply_filters(
 					'register_post_type_job_guest_user',
@@ -265,12 +259,6 @@
     <InvalidArgument>
       <code><![CDATA[array_values( get_job_listing_types( 'id=>slug' ) )]]></code>
     </InvalidArgument>
-    <ParadoxicalCondition>
-      <code><![CDATA[! defined( 'ABSPATH' )]]></code>
-    </ParadoxicalCondition>
-    <RedundantPropertyInitializationCheck>
-      <code><![CDATA[isset( $this->job_dashboard_job_ids )]]></code>
-    </RedundantPropertyInitializationCheck>
     <UndefinedPropertyFetch>
       <code><![CDATA[$term->term_id]]></code>
     </UndefinedPropertyFetch>
@@ -342,10 +330,6 @@
     <InvalidScalarArgument>
       <code><![CDATA[$this->job_id]]></code>
     </InvalidScalarArgument>
-    <MissingFile>
-      <code><![CDATA[include_once ABSPATH . 'wp-admin/includes/image.php']]></code>
-      <code><![CDATA[include_once ABSPATH . 'wp-admin/includes/media.php']]></code>
-    </MissingFile>
     <TypeDoesNotContainType>
       <code>! is_string( $attachment_url )</code>
       <code>empty( $attachment_url ) || ! is_string( $attachment_url )</code>
@@ -393,9 +377,6 @@
     <InvalidArgument>
       <code><![CDATA[$this->get_plugin_versions()]]></code>
     </InvalidArgument>
-    <MissingFile>
-      <code><![CDATA[require_once ABSPATH . 'wp-admin/includes/plugin.php']]></code>
-    </MissingFile>
     <UndefinedVariable>
       <code>$item</code>
       <code>$plugin_data</code>
@@ -452,9 +433,6 @@
     <InvalidReturnType>
       <code>null|WP_Error</code>
     </InvalidReturnType>
-    <MissingFile>
-      <code><![CDATA[include_once ABSPATH . 'wp-admin/includes/plugin.php']]></code>
-    </MissingFile>
   </file>
   <file src="lib/usage-tracking/tests/support/class-usage-tracking-test-subclass.php">
     <TypeDoesNotContainType>
@@ -498,10 +476,6 @@
       <code>array</code>
       <code>bool</code>
     </InvalidReturnType>
-    <MissingFile>
-      <code><![CDATA[include_once ABSPATH . 'wp-admin/includes/file.php']]></code>
-      <code><![CDATA[include_once ABSPATH . 'wp-admin/includes/media.php']]></code>
-    </MissingFile>
     <NullableReturnStatement>
       <code><![CDATA[$return_datetime ? null : '']]></code>
     </NullableReturnStatement>

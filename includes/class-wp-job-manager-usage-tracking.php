@@ -267,7 +267,7 @@ class WP_Job_Manager_Usage_Tracking extends WP_Job_Manager_Usage_Tracking_Base {
 		return sprintf(
 			// translators: the href tag contains the URL for the page telling users what data WPJM tracks.
 			__(
-				'Help us make WP Job Manager better by allowing us to collect
+				'Help us make Job Manager better by allowing us to collect
 				<a target="_blank" href="%s">usage tracking data</a>.
 				No sensitive information is collected.',
 				'wp-job-manager'

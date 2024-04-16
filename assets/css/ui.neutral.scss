@@ -1,8 +1,11 @@
 
 :root {
 	--jm-ui-border-light: #{fadeCurrentColor(15%)};
+	--jm-ui-border-faint: #{fadeCurrentColor(5%)};
 	--jm-ui-border-strong: currentColor;
 	--jm-ui-border-size: 1px;
+
+	--jm-ui-responsive-scale: clamp(0px, (100vw - 400px) / (1200 - 400), 1px);
 
 	--jm-ui-background-color: initial;
 	--jm-ui-text-color: initial;
@@ -12,16 +15,21 @@
 	--jm-ui-radius-2x: calc(2 * var(--jm-ui-radius));
 	--jm-ui-radius-4x: calc(4 * var(--jm-ui-radius));
 
+	--jm-ui-faint-color: #{fadeCurrentColor(2.5%)};
 	--jm-ui-accent-color: inherit;
+	--jm-ui-danger-color: #cc1818;
+	--jm-ui-error-color: #cc1818;
+	--jm-ui-info-color: #4e71ec;
+	--jm-ui-success-color: #4ab866;
 	--jm-ui-accent-color-contrast: #ffffff;
 
-	--jm-ui-button-color: var(--jm-ui-accent-color);
+	--jm-ui-button-color: var(--jm-ui-accent-color, inherit);
 	--jm-ui-button-contrast: var(--jm-ui-accent-color-contrast, #ffffff);
 	--jm-ui-link-color: var(--jm-ui-accent-color, inherit);
 
-	--jm-ui-notice-error: #cc1818;
-	--jm-ui-notice-info: #4e71ec;
-	--jm-ui-notice-success: #4ab866;
+	--jm-ui-notice-error: var(--jm-ui-danger-color);
+	--jm-ui-notice-info: var(--jm-ui-info-color);
+	--jm-ui-notice-success: var(--jm-ui-success-color);
 	--jm-ui-notice-strong: var(--jm-ui-border-strong);
 
 	--jm-ui-notice-shadow: none;
@@ -43,17 +51,25 @@
 	--jm-ui-space-xxl: calc(24 * var(--jm-ui-space-base)); // 96px
 
 	--jm-ui-font-size: 16px;
+	--jm-ui-font-size-m: 14px;
+	--jm-ui-font-size-s: 12px;
 	--jm-ui-heading-font-size: 20px;
 	--jm-ui-large-font-size: 24px;
 	--jm-ui-button-font-size: 14px;
 	--jm-ui-icon-size: 24px;
+	--jm-ui-icon-size-m: 20px;
+	--jm-ui-icon-size-s: 14px;
 
 	--jm-ui-shadow-modal: 0 0.7px 1px 0 rgba(0, 0, 0, 0.15),
 	0 2.7px 3.8px -0.2px rgba(0, 0, 0, 0.15),
 	0px 5.5px 7.8px -0.3px rgba(0, 0, 0, 0.15),
 	0.1px 11.5px 16.4px -0.5px rgba(0, 0, 0, 0.15);
 
+	--jm-ui-shadow-popover: 0px 2px 6px 0px rgba(0, 0, 0, 0.05);
+
 	--jm-ui-svg-close: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'%3e%3cpath fill='black' d='m12 13.06 3.71 3.71 1.06-1.06-3.7-3.71 3.7-3.71-1.06-1.06-3.71 3.7-3.71-3.7-1.06 1.06 3.7 3.71-3.7 3.71 1.06 1.06 3.71-3.7Z'/%3e%3c/svg%3e");
-	--jm-ui-svg-arrow-down: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='32' height='6' viewBox='0 0 16 10'%3e%3cpath fill='currentColor' fill-rule='evenodd' d='M0 1.6 1.53 0 8 6.95 14.5 0 16 1.6 8 10 0 1.6Z' clip-rule='evenodd'/%3e%3c/svg%3e");
-	--jm-ui-svg-check: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3e%3cpath stroke='%231E1E1E' stroke-width='1.5' d='m18.93 6-8.9 11.97-5.16-3.84'/%3e%3c/svg%3e");
+	--jm-ui-svg-arrow-down: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='32' height='6' viewBox='0 0 16 10'%3e%3cpath fill='black' fill-rule='evenodd' d='M0 1.6 1.53 0 8 6.95 14.5 0 16 1.6 8 10 0 1.6Z' clip-rule='evenodd'/%3e%3c/svg%3e");
+	--jm-ui-svg-check: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3e%3cpath stroke='black' stroke-width='1.5' d='m18.93 6-8.9 11.97-5.16-3.84'/%3e%3c/svg%3e");
+	--jm-ui-svg-ellipsis-v: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3e%3cpath fill='black' fill-rule='evenodd' d='M11 19v-2h2v2h-2Zm0-6v-2h2v2h-2Zm0-6V5h2v2h-2Z' clip-rule='evenodd'/%3e%3c/svg%3e");
+	--jm-ui-svg-search: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3e%3cpath fill='black' fill-rule='evenodd' d='M19 11a6 6 0 0 1-9.68 4.74l-3.79 3.79-1.06-1.06 3.79-3.8A6 6 0 1 1 19 11Zm-1.5 0a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z' clip-rule='evenodd'/%3e%3c/svg%3e");
 }

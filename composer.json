@@ -15,8 +15,7 @@
     "sirbrillig/phpcs-variable-analysis": "^2.6",
     "yoast/phpunit-polyfills": "^1.0.2",
     "vimeo/psalm": "^5.13",
-    "php-stubs/wordpress-stubs": "^6.4",
-    "php-stubs/wp-cli-stubs": "^2.10"
+    "php-stubs/wordpress-stubs": "^6.4"
   },
   "archive": {
     "exclude": [

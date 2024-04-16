@@ -24,6 +24,16 @@
 	</projectFiles>
 	<issueHandlers>
 		<MissingFile errorLevel="info" />
+		<UndefinedClass>
+			<errorLevel type="suppress">
+				<referencedClass name="WP_CLI" />
+			</errorLevel>
+		</UndefinedClass>
+		<InvalidArgument>
+			<errorLevel type="suppress">
+				<referencedFunction name="esc_attr" />
+			</errorLevel>
+		</InvalidArgument>
 	</issueHandlers>
 	<stubs>
 		<file name="wp-job-manager.php" />

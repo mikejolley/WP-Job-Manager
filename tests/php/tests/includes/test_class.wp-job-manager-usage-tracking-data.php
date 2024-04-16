@@ -776,6 +776,29 @@ class WP_Test_WP_Job_Manager_Usage_Tracking_Data extends WPJM_BaseTest {
 		$this->assertEquals( 1, $base_fields['paid'] );
 	}
 
+
+	/**
+	 * Tests that get_usage_data() returns the plugin settings.
+	 *
+	 * @since 1.30.0
+	 * @covers WP_Job_Manager_Usage_Tracking_Data::get_usage_data
+	 */
+	public function test_get_settings() {
+		$published = 3;
+		$expired   = 2;
+
+		update_option( 'job_manager_enable_types', '1' );
+		update_option( 'job_manager_hide_filled_positions', '1' );
+		update_option( 'job_manager_google_maps_api_key', '000000000' );
+
+		$this->create_job_listings_with_meta( '_company_name', 'Automattic', $published, $expired );
+
+		$data = WP_Job_Manager_Usage_Tracking_Data::get_usage_data();
+		$this->assertEquals( $data['settings_enable_types'], '1' );
+		$this->assertEquals( $data['settings_hide_filled_positions'], '1' );
+		$this->assertTrue( empty( $data['settings_google_maps_api_key'] ) );
+	}
+
 	/**
 	 * Adds fake license to one of the products.
 	 */

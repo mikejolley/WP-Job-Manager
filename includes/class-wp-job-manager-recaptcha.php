@@ -15,7 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WP_Job_Manager_Recaptcha class.
  *
  * @since $$next-version$$
- * @internal
  */
 class WP_Job_Manager_Recaptcha {
 
@@ -169,7 +168,7 @@ class WP_Job_Manager_Recaptcha {
 	 *
 	 * @access private
 	 *
-	 * @return bool|WP_Error
+	 * @return bool|\WP_Error
 	 */
 	public function validate_recaptcha_field( $success ) {
 		$recaptcha_field_label = get_option( 'job_manager_recaptcha_label' );
@@ -236,7 +235,7 @@ class WP_Job_Manager_Recaptcha {
 			 *
 			 * @since $$next-version$$
 			 *
-			 * @param float The score tolerance value. Default is 0.5.
+			 * @param float $score_tolerance The score tolerance value. Default is 0.5.
 			 */
 			$score_tolerance = apply_filters( 'job_manager_recaptcha_v3_score_tolerance', 0.5 );
 

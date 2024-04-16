@@ -5,6 +5,8 @@
  * @package wp-job-manager
  */
 
+use WP_Job_Manager\Job_Overlay;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -57,7 +59,6 @@ class WP_Job_Manager_Admin {
 		WP_Job_Manager_CPT::instance();
 
 		include_once dirname( __FILE__ ) . '/class-wp-job-manager-promoted-jobs-admin.php';
-		include_once dirname( __FILE__ ) . '/class-wp-job-manager-settings.php';
 		include_once dirname( __FILE__ ) . '/class-wp-job-manager-writepanels.php';
 		include_once dirname( __FILE__ ) . '/class-wp-job-manager-setup.php';
 		include_once dirname( __FILE__ ) . '/class-wp-job-manager-addons-landing-page.php';
@@ -65,6 +66,7 @@ class WP_Job_Manager_Admin {
 
 		$this->settings_page = WP_Job_Manager_Settings::instance();
 		WP_Job_Manager_Addons_Landing_Page::instance();
+		Job_Overlay::instance();
 
 		add_action( 'admin_init', [ $this, 'admin_init' ] );
 		add_action( 'current_screen', [ $this, 'conditional_includes' ] );

@@ -88,8 +88,10 @@ class Modal_Dialog {
 	<div class="jm-dialog-open">
 		<div class="jm-dialog-backdrop" onclick="{$id}.close()"></div>
 		<div class="jm-dialog-modal {$class}" style="{$style}">
-			{$content}
-			<a href="#" role="button" class="jm-ui-button--icon jm-dialog-close" onclick="{$id}.close()" aria-label="{$close_label}"><span class="jm-ui-button__icon"></span></a>
+			<div class="jm-dialog-modal-container">
+				<div class="jm-dialog-modal-content">{$content}</div>
+				<a href="#" role="button" class="jm-ui-button--icon jm-dialog-close" onclick="{$id}.close();  event.preventDefault();" aria-label="{$close_label}"><span class="jm-ui-button__icon"></span></a>
+			</div>
 		</div>
 	</div>
 </dialog>

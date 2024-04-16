@@ -76,6 +76,8 @@ class WP_Job_Manager_Install {
 			update_option( 'job_manager_permalinks', wp_json_encode( $permalink_options ) );
 		}
 
+		\WP_Job_Manager\Stats::instance()->migrate_db();
+
 		delete_transient( 'wp_job_manager_addons_html' );
 		update_option( 'wp_job_manager_version', JOB_MANAGER_VERSION );
 	}

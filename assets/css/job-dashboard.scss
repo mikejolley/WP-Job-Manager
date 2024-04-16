@@ -1,0 +1,152 @@
+
+@import 'mixins';
+@import 'job-overlay';
+
+.jm-dashboard {
+	container-type: inline-size;
+
+	--jm-dashboard-company-logo-size: calc(var(--jm-ui-icon-size) + 2 * var(--jm-ui-space-xs));
+}
+
+.jm-dashboard-job, .jm-dashboard-header {
+	display: flex;
+	align-items: center;
+	padding: var(--jm-ui-space-sm);
+	gap: var(--jm-ui-space-sm);
+	margin: var(--jm-ui-space-sm) 0;
+	font-size: var(--jm-ui-font-size-m);
+}
+
+.jm-dashboard-header {
+	color: fadeCurrentColor(85%);
+	margin-bottom: unset;
+	padding-bottom: unset;
+}
+
+.jm-dashboard__intro {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: var(--jm-ui-space-sm);
+}
+
+.jm-dashboard__filters {
+	font-size: var(--jm-ui-button-font-size);
+}
+
+.jm-dashboard-job {
+	border: var(--jm-ui-border-size) solid var(--jm-ui-border-light);
+}
+
+.jm-dashboard-job-column {
+	flex: 1 1 calc(50% - var(--jm-ui-space-sm));
+	min-width: 0;
+}
+
+.jm-dashboard small {
+	font-size: var(--jm-ui-font-size-s);
+}
+
+.jm-dashboard .job_title {
+	flex: 1 1 200%;
+}
+
+.jm-dashboard-job-column.company {
+
+	flex: 0 0 var(--jm-dashboard-company-logo-size);
+	.jm-dashboard-header & {
+		visibility: hidden;
+	}
+}
+
+.jm-dashboard .job-status {
+	text-transform: uppercase;
+	font-weight: 500;
+	font-size: var(--jm-ui-font-size-s);
+	line-height: var(--jm-ui-icon-size-s);
+	color: fadeCurrentColor( 70% );
+	margin: var(--jm-ui-space-xxs) 0;
+
+	.jm-ui-row {
+		gap: var(--jm-ui-space-xxxs);
+	}
+
+	.jm-separator {
+		color: fadeCurrentColor( 20% );
+	}
+
+	.jm-ui-icon {
+		width: var(--jm-ui-icon-size-s);
+		height: var(--jm-ui-icon-size-s);
+	}
+
+	.job-status-rejected {
+		color: var(--jm-ui-error-color);
+	}
+}
+
+.jm-dashboard img.company_logo {
+	width: var(--jm-dashboard-company-logo-size);
+	height: var(--jm-dashboard-company-logo-size);
+	object-fit: contain;
+}
+
+
+.jm-dashboard-job-column.actions {
+	flex: 0.5 1 100%;
+	text-align: right;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: var(--jm-ui-space-m);
+}
+
+.jm-dashboard-job-column a.job-title {
+	font-weight: 600;
+	font-size: var(--jm-ui-font-size);
+	line-height: 1.2;
+	text-decoration: unset;
+}
+
+.jm-dashboard-job-column a.job-title:hover {
+	text-decoration: underline;
+}
+
+.jm-dashboard-action {
+	display: block;
+	text-decoration: none;
+}
+.jm-dashboard-action--primary {
+	flex-basis: fit-content;
+	white-space: nowrap;
+}
+
+.jm-dashboard-action:where(:not(:hover):not(:focus)) {
+	color: inherit;
+}
+
+.job-dashboard-action-delete {
+	color: var(--jm-ui-danger-color);
+}
+
+@container (width < 540px)
+{
+	.jm-dashboard-job {
+		flex-wrap: wrap;
+		align-items: flex-start;
+	}
+
+	.jm-dashboard-header {
+		display: none;
+	}
+
+	.jm-dashboard-job-column.actions {
+		justify-content: space-between;
+	}
+
+	.jm-dashboard-job-column.company ~ .jm-dashboard-job-column.job_title {
+		flex-basis: calc( 100% - var(--jm-dashboard-company-logo-size) - var(--jm-ui-space-sm) );
+		order: -1;
+	}
+}

@@ -42,7 +42,7 @@ if ( in_array( 'message-icon', $classes, true ) ) {
 
 ?>
 
-<div class="jm-notice <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+<div class="jm-notice <?php echo esc_attr( implode( ' ', $classes ) ); ?>" role="status">
 	<?php if ( $title ) : ?>
 		<div class="jm-notice__header">
 			<?php echo $icon_html; ?>
