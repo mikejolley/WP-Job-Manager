@@ -9,22 +9,29 @@
  * @package     wp-job-manager
  * @category    Template
  * @version     $$next-version$$
+ *
+ * @var array $key Form field name.
+ * @var array $field Form field data.
+ *
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-$term        = get_term_by( 'slug', $field['default'], $field['taxonomy'] );
 $placeholder = array_key_exists( 'placeholder', $field ) && ! empty( $field['placeholder'] ) ? $field['placeholder'] : esc_html__( 'Select an Option...', 'wp-job-manager' );
+$selected = null;
 
 // Get selected value.
 if ( isset( $field['value'] ) ) {
 	$selected = $field['value'];
 } elseif ( is_int( $field['default'] ) ) {
 	$selected = $field['default'];
-} elseif ( ! empty( $field['default'] ) && $term ) {
-	$selected = $term->term_id;
+} elseif ( ! empty( $field['default'] ) ) {
+	$default = get_term_by( 'slug', $field['default'], $field['taxonomy'] );
+	if ( ! empty( $default ) ) {
+		$selected = $default->term_id;
+	}
 } else {
 	$selected = '';
 }
