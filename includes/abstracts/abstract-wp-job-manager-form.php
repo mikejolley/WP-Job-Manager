@@ -136,7 +136,6 @@ abstract class WP_Job_Manager_Form {
 	 * @param array $atts Attributes to use in the view handler.
 	 */
 	public function output( $atts = [] ) {
-		WP_Job_Manager\WP_Job_Manager_Recaptcha::enqueue_scripts();
 		$step_key = $this->get_step_key( $this->step );
 		$this->show_errors();
 		$this->show_messages();
@@ -322,7 +321,45 @@ abstract class WP_Job_Manager_Form {
 	 * Enqueue the scripts for the form.
 	 */
 	public function enqueue_scripts() {
-		WP_Job_Manager\WP_Job_Manager_Recaptcha::enqueue_scripts();
+		_deprecated_function( __METHOD__, '$$next-version$$', 'WP_Job_Manager\WP_Job_Manager_Form::enqueue_scripts' );
+		WP_Job_Manager\WP_Job_Manager_Recaptcha::instance()->enqueue_scripts();
+	}
+
+
+	/**
+	 * Output the reCAPTCHA field.
+	 *
+	 * @deprecated
+	 */
+	public function display_recaptcha_field() {
+		_deprecated_function( __METHOD__, '$$next-version$$', 'WP_Job_Manager\WP_Job_Manager_Form::display_recaptcha_field' );
+		WP_Job_Manager\WP_Job_Manager_Recaptcha::instance()->display_recaptcha_field();
+	}
+
+	/**
+	 * Validate a reCAPTCHA field.
+	 *
+	 * @param bool $success
+	 *
+	 * @deprecated
+	 *
+	 * @return bool|\WP_Error
+	 */
+	public function validate_recaptcha_field( $success ) {
+		_deprecated_function( __METHOD__, '$$next-version$$', 'WP_Job_Manager\WP_Job_Manager_Form::validate_recaptcha_field' );
+		return WP_Job_Manager\WP_Job_Manager_Recaptcha::instance()->validate_recaptcha_field( $success );
+	}
+
+	/**
+	 * Checks whether reCAPTCHA has been set up and is available.
+	 *
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function is_recaptcha_available() {
+		_deprecated_function( __METHOD__, '$$next-version$$', 'WP_Job_Manager\WP_Job_Manager_Form::is_recaptcha_available' );
+		return WP_Job_Manager\WP_Job_Manager_Recaptcha::instance()->is_recaptcha_available();
 	}
 
 	/**

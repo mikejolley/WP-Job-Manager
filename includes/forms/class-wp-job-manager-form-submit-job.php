@@ -80,7 +80,11 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 		WP_Job_Manager_Helper_Renewals::instance( $this );
 
 		// Recaptcha support.
-		WP_Job_Manager\WP_Job_Manager_Recaptcha::instance();
+		WP_Job_Manager\WP_Job_Manager_Recaptcha::instance()->maybe_enable_recaptcha(
+			'job_manager_enable_recaptcha_job_submission',
+			[ 'submit_job_form_end' ],
+			[ 'submit_job_form_validate_fields', 'submit_draft_job_form_validate_fields' ]
+		);
 
 		if ( $this->use_agreement_checkbox() ) {
 			add_action( 'submit_job_form_end', [ $this, 'display_agreement_checkbox_field' ] );
@@ -843,12 +847,9 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 		];
 
 		if ( ! empty( $values['job']['job_schedule_listing'] ) ) {
-			$maybe_formatted_date = $this->maybe_format_future_datetime( $values['job']['job_schedule_listing'] );
+			$is_scheduled_date = $this->apply_scheduled_date( $job_data, $values['job']['job_schedule_listing'] );
 
-			if ( false !== $maybe_formatted_date ) {
-				$job_data['post_date']     = $maybe_formatted_date;
-				$job_data['post_date_gmt'] = $maybe_formatted_date;
-			} else {
+			if ( ! $is_scheduled_date ) {
 				unset( $values['job']['job_schedule_listing'] );
 			}
 		}
@@ -1072,13 +1073,37 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 	}
 
 	/**
+	 * Helper which formats the scheduled date and sets the appropriate dates in the job data.
+	 *
+	 * @param array  $job_data       The job data array to modify.
+	 * @param string $scheduled_date The scheduled date.
+	 *
+	 * @return bool True when the scheduled date is a valid future date, false otherwise.
+	 */
+	public static function apply_scheduled_date( array &$job_data, string $scheduled_date ): bool {
+		$maybe_formatted_date = self::maybe_format_future_datetime( $scheduled_date );
+
+		if ( false === $maybe_formatted_date ) {
+			$job_data['post_date']     = current_time( 'mysql' );
+			$job_data['post_date_gmt'] = current_time( 'mysql', 1 );
+
+			return false;
+		}
+
+		$job_data['post_date']     = $maybe_formatted_date;
+		$job_data['post_date_gmt'] = $maybe_formatted_date;
+
+		return true;
+	}
+
+	/**
 	 * Checks that a string is a valid future datetime. Formats datetime for post date.
 	 *
 	 * @param string $maybe_date_string The date to format.
 	 *
 	 * @return false|mixed
 	 */
-	private function maybe_format_future_datetime( string $maybe_date_string ) {
+	private static function maybe_format_future_datetime( string $maybe_date_string ) {
 		if ( empty( $maybe_date_string ) ) {
 			return false;
 		}
@@ -1120,24 +1145,14 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 				// Reset expiry.
 				delete_post_meta( $job->ID, '_job_expires' );
 
-				$post_date     = current_time( 'mysql' );
-				$post_date_gmt = current_time( 'mysql', 1 );
+				// Update job listing.
+				$update_job                = [];
+				$update_job['ID']          = $job->ID;
+				$update_job['post_status'] = apply_filters( 'submit_job_post_status', get_option( 'job_manager_submission_requires_approval' ) ? 'pending' : 'publish', $job );
+				$update_job['post_author'] = get_current_user_id();
 
 				$job_schedule_listing_date = get_post_meta( $job->ID, '_job_schedule_listing', true );
-				$maybe_formatted_date      = $this->maybe_format_future_datetime( $job_schedule_listing_date );
-
-				if ( false !== $maybe_formatted_date ) {
-					$post_date     = $maybe_formatted_date;
-					$post_date_gmt = $maybe_formatted_date;
-				}
-
-				// Update job listing.
-				$update_job                  = [];
-				$update_job['ID']            = $job->ID;
-				$update_job['post_status']   = apply_filters( 'submit_job_post_status', get_option( 'job_manager_submission_requires_approval' ) ? 'pending' : 'publish', $job );
-				$update_job['post_date']     = $post_date;
-				$update_job['post_date_gmt'] = $post_date_gmt;
-				$update_job['post_author']   = get_current_user_id();
+				$this->apply_scheduled_date( $update_job, $job_schedule_listing_date );
 
 				wp_update_post( $update_job );
 			}

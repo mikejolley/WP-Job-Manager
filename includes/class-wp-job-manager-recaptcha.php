@@ -55,35 +55,56 @@ class WP_Job_Manager_Recaptcha {
 		$this->secret_key        = get_option( self::RECAPTCHA_SECRET_KEY );
 		$this->recaptcha_version = get_option( self::RECAPTCHA_VERSION, 'v2' );
 
-		if ( $this->use_recaptcha_field() ) {
-			add_action( 'submit_job_form_end', [ $this, 'display_recaptcha_field' ] );
-			add_filter( 'submit_job_form_validate_fields', [ $this, 'validate_recaptcha_field' ] );
-			add_filter( 'submit_draft_job_form_validate_fields', [ $this, 'validate_recaptcha_field' ] );
+	}
+
+	/**
+	 * Enables the reCAPTCHA field on the form. To do that, it checks if the provided option is enabled and if it is
+	 * it adds the necessary hooks to display and validate the reCAPTCHA field.
+	 *
+	 * @param string $recaptcha_enabled_option The options name to check if the reCAPTCHA field is enabled.
+	 * @param array  $display_hooks The hooks to display the reCAPTCHA field.
+	 * @param array  $validate_hooks The hooks to validate the reCAPTCHA field.
+	 *
+	 * @return void
+	 */
+	public function maybe_enable_recaptcha( string $recaptcha_enabled_option, array $display_hooks, array $validate_hooks ) {
+		if ( $this->use_recaptcha_field( $recaptcha_enabled_option ) ) {
+			foreach ( $display_hooks as $display_hook ) {
+				add_action( $display_hook, [ $this, 'display_recaptcha_field' ] );
+			}
+
+			foreach ( $validate_hooks as $validate_hook ) {
+				add_filter( $validate_hook, [ $this, 'validate_recaptcha_field' ] );
+			}
+
+			add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 		}
 	}
 
 	/**
 	 * Use reCAPTCHA field on the form?
 	 *
+	 * @param string $option_name The options name to check if the reCAPTCHA field is enabled.
+	 *
 	 * @return bool
 	 */
-	public function use_recaptcha_field() {
+	private function use_recaptcha_field( $option_name ) {
 		if ( ! $this->is_recaptcha_available() ) {
 			return false;
 		}
-		return 1 === absint( get_option( 'job_manager_enable_recaptcha_job_submission' ) );
+
+		return 1 === absint( get_option( $option_name ) );
 	}
 
 	/**
-	 * Enqueue the scripts for the form.
+	 * Enqueue the scripts and add appropriate hooks for the recaptcha to load.
+	 *
+	 * @access private
 	 */
-	public static function enqueue_scripts() {
+	public function enqueue_scripts() {
 		$instance = self::instance();
 
-		if (
-			$instance->use_recaptcha_field() &&
-			in_array( $instance->recaptcha_version, [ 'v2', 'v3' ], true )
-		) {
+		if ( in_array( $instance->recaptcha_version, [ 'v2', 'v3' ], true ) ) {
 			$recaptcha_version = $instance->recaptcha_version;
 			$recaptcha_url     = '';
 
@@ -98,6 +119,8 @@ class WP_Job_Manager_Recaptcha {
 
 	/**
 	 * Checks whether reCAPTCHA has been set up and is available.
+	 *
+	 * @access private
 	 *
 	 * @return bool
 	 */
@@ -115,7 +138,9 @@ class WP_Job_Manager_Recaptcha {
 	}
 
 	/**
-	 * Dispaly the reCAPTCHA field in the form.
+	 * Display the reCAPTCHA field in the form.
+	 *
+	 * @access private
 	 *
 	 * @return void
 	 */
@@ -140,6 +165,8 @@ class WP_Job_Manager_Recaptcha {
 	 * Validate a reCAPTCHA field.
 	 *
 	 * @param bool $success
+	 *
+	 * @access private
 	 *
 	 * @return bool|\WP_Error
 	 */
