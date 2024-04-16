@@ -343,7 +343,7 @@ abstract class WP_Job_Manager_Form {
 	 *
 	 * @deprecated
 	 *
-	 * @return bool|WP_Error
+	 * @return bool|\WP_Error
 	 */
 	public function validate_recaptcha_field( $success ) {
 		_deprecated_function( __METHOD__, '$$next-version$$', 'WP_Job_Manager\WP_Job_Manager_Form::validate_recaptcha_field' );
