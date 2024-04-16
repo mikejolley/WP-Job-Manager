@@ -139,7 +139,7 @@ class WP_Job_Manager_Recaptcha {
 	}
 
 	/**
-	 * Dispaly the reCAPTCHA field in the form.
+	 * Display the reCAPTCHA field in the form.
 	 *
 	 * @access private
 	 *
