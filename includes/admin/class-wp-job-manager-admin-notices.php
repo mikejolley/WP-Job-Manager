@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use WP_Job_Manager\Admin\Notices_Conditions_Checker;
+use WP_Job_Manager\Admin\Release_Notice;
 use WP_Job_Manager\WP_Job_Manager_Com_API;
 
 /**
@@ -46,6 +47,9 @@ class WP_Job_Manager_Admin_Notices {
 			'class' => [],
 		],
 		'em'     => [],
+		'ul'     => [],
+		'ol'     => [],
+		'li'     => [],
 		'p'      => [],
 		'strong' => [],
 	];
@@ -62,12 +66,15 @@ class WP_Job_Manager_Admin_Notices {
 	 */
 	public static function init() {
 		add_action( 'admin_notices', [ __CLASS__, 'display_notices' ] );
-		add_action( 'wp_loaded', [ __CLASS__, 'dismiss_notices' ] );
+		add_action( 'wp_loaded', [ __CLASS__, 'handle_notice_action' ], 10 );
+		add_action( 'wp_loaded', [ __CLASS__, 'dismiss_notices' ], 11 );
 		add_action( 'wp_ajax_wp_job_manager_dismiss_notice', [ __CLASS__, 'handle_notice_dismiss' ] );
-		add_filter( 'wpjm_admin_notices', [ __CLASS__, 'maybe_add_addon_update_available_notice' ], 10, 1 );
-		add_filter( 'wpjm_admin_notices', [ __CLASS__, 'paid_listings_renewal_notice' ], 10, 1 );
-		add_filter( 'wpjm_admin_notices', [ __CLASS__, 'we_have_addons_notice' ], 10, 1 );
-		add_filter( 'wpjm_admin_notices', [ __CLASS__, 'maybe_add_core_setup_notice' ], 10, 1 );
+		add_filter( 'wpjm_admin_notices', [ __CLASS__, 'maybe_add_addon_update_available_notice' ] );
+		add_filter( 'wpjm_admin_notices', [ __CLASS__, 'paid_listings_renewal_notice' ] );
+		add_filter( 'wpjm_admin_notices', [ __CLASS__, 'we_have_addons_notice' ] );
+		add_filter( 'wpjm_admin_notices', [ __CLASS__, 'maybe_add_core_setup_notice' ] );
+
+		Release_Notice::init();
 	}
 
 	/**
@@ -161,11 +168,11 @@ class WP_Job_Manager_Admin_Notices {
 	}
 
 	/**
-	 * Dismiss notices as requested by user. Inspired by WooCommerce's approach.
+	 * Dismiss a notice.
 	 */
 	public static function dismiss_notices() {
 		if ( isset( $_GET['wpjm_hide_notice'] ) && isset( $_GET['_wpjm_notice_nonce'] ) ) {
-			if ( ! wp_verify_nonce( wp_unslash( $_GET['_wpjm_notice_nonce'] ), 'job_manager_hide_notices_nonce' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce should not be modified.
+			if ( ! wp_verify_nonce( wp_unslash( $_GET['_wpjm_notice_nonce'] ), 'job_manager_notices_nonce' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce should not be modified.
 				wp_die( esc_html__( 'Action failed. Please refresh the page and retry.', 'wp-job-manager' ) );
 			}
 
@@ -173,12 +180,33 @@ class WP_Job_Manager_Admin_Notices {
 				wp_die( esc_html__( 'You don&#8217;t have permission to do this.', 'wp-job-manager' ) );
 			}
 
-			$hide_notice = sanitize_key( wp_unslash( $_GET['wpjm_hide_notice'] ) );
+			$notice_id = sanitize_key( wp_unslash( $_GET['wpjm_hide_notice'] ) );
 
-			self::remove_notice( $hide_notice );
+			self::dismiss_notice( $notice_id );
 
-			wp_safe_redirect( remove_query_arg( [ 'wpjm_hide_notice', '_wpjm_notice_nonce' ] ) );
+			wp_safe_redirect( remove_query_arg( [ 'wpjm_hide_notice', '_wpjm_notice_nonce', 'wpjm_notice_action' ] ) );
 			exit;
+		}
+	}
+
+	/**
+	 * Call an action when a notice button is clicked.
+	 */
+	public static function handle_notice_action() {
+
+		if ( isset( $_GET['wpjm_notice_action'] ) && isset( $_GET['_wpjm_notice_nonce'] ) ) {
+
+			$action = sanitize_key( wp_unslash( $_GET['wpjm_notice_action'] ) );
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce should not be modified.
+			if ( ! wp_verify_nonce( wp_unslash( $_GET['_wpjm_notice_nonce'] ), 'job_manager_notices_nonce' ) ) {
+				wp_die( esc_html__( 'Action failed. Please refresh the page and retry.', 'wp-job-manager' ) );
+			}
+
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'You don&#8217;t have permission to do this.', 'wp-job-manager' ) );
+			}
+
+			do_action( 'job_manager_action_' . $action );
 		}
 	}
 
@@ -209,6 +237,25 @@ class WP_Job_Manager_Admin_Notices {
 	}
 
 	/**
+	 * Get a notice by ID.
+	 *
+	 * @param string $notice_id Notice ID.
+	 *
+	 * @return array|false
+	 */
+	public static function get_notice( $notice_id ) {
+		$notices = self::get_notices();
+
+		if ( ! isset( $notices[ $notice_id ] ) ) {
+			return false;
+		}
+
+		$notice = self::normalize_notice( $notices[ $notice_id ] );
+
+		return $notice;
+	}
+
+	/**
 	 * Check if a notice was dismissed.
 	 *
 	 * @param string $notice_id Notice ID.
@@ -226,7 +273,6 @@ class WP_Job_Manager_Admin_Notices {
 	 * Note: For internal use only. Do not call manually.
 	 */
 	public static function display_notices() {
-
 		/**
 		 * Allows WPJM related plugins to set up their notice hooks.
 		 *
@@ -332,6 +378,7 @@ class WP_Job_Manager_Admin_Notices {
 	 * @param bool  $is_user_notification True if we are setting user notifications (vs site-wide notifications).
 	 */
 	private static function save_dismissed_notices( $dismissed_notices, $is_user_notification ) {
+
 		$dismissed_notices = array_unique( $dismissed_notices );
 		if ( $is_user_notification ) {
 			update_user_meta( get_current_user_id(), self::DISMISSED_NOTICES_USER_META, $dismissed_notices );
@@ -348,31 +395,43 @@ class WP_Job_Manager_Admin_Notices {
 	public static function handle_notice_dismiss() {
 		check_ajax_referer( self::DISMISS_NOTICE_ACTION, 'nonce' );
 
-		$notices   = self::get_notices();
 		$notice_id = isset( $_POST['notice'] ) ? sanitize_text_field( wp_unslash( $_POST['notice'] ) ) : false;
-		if ( ! $notice_id || ! isset( $notices[ $notice_id ] ) ) {
+		if ( ! $notice_id ) {
 			return;
 		}
 
-		$notice = self::normalize_notice( $notices[ $notice_id ] );
+		$notice = self::get_notice( $notice_id );
 
-		$is_dismissible       = $notice['dismissible'];
-		$is_user_notification = 'user' === $notice['type'];
-		if (
-			! $is_dismissible
-			|| ( ! $is_user_notification && ! current_user_can( 'manage_options' ) )
-		) {
+		if ( ! $notice || ! $notice['dismissible'] || ( 'user' !== $notice['type'] && ! current_user_can( 'manage_options' ) ) ) {
 			wp_die( '', '', 403 );
 		}
+
+		self::dismiss_notice( $notice_id );
+		exit;
+	}
+
+	/**
+	 * Save notice state as dismissed.
+	 *
+	 * @param string $notice_id Notice ID.
+	 *
+	 * @return void
+	 */
+	public static function dismiss_notice( $notice_id ) {
+
+		$notice = self::get_notice( $notice_id );
+		if ( ! $notice ) {
+			return;
+		}
+
+		$is_user_notification = 'user' === $notice['type'];
 
 		$dismissed_notices   = self::get_dismissed_notices( $is_user_notification );
 		$dismissed_notices[] = $notice_id;
 
 		self::save_dismissed_notices( $dismissed_notices, $is_user_notification );
 
-		do_action( 'wp_job_manager_notice_dismissed', $notices[ $notice_id ], $notice_id, $is_user_notification );
-
-		exit;
+		do_action( 'wp_job_manager_notice_dismissed', $notice, $notice_id, $is_user_notification );
 	}
 
 	/**
@@ -453,7 +512,7 @@ class WP_Job_Manager_Admin_Notices {
 					],
 					[
 						'primary' => false,
-						'url'     => esc_url( wp_nonce_url( add_query_arg( 'wpjm_hide_notice', self::NOTICE_CORE_SETUP ), 'job_manager_hide_notices_nonce', '_wpjm_notice_nonce' ) ),
+						'url'     => self::get_dismiss_url( self::NOTICE_CORE_SETUP ),
 						'label'   => __( 'Skip Setup*', 'wp-job-manager' ),
 					],
 				],
@@ -498,6 +557,34 @@ class WP_Job_Manager_Admin_Notices {
 		}
 
 		return $notices;
+	}
+
+	/**
+	 * Get URL for dismiss action for a notice.
+	 *
+	 * @param string $notice_name
+	 * @return string
+	 */
+	public static function get_dismiss_url( $notice_name ) {
+		return wp_nonce_url( add_query_arg( [ 'wpjm_hide_notice' => $notice_name ] ), 'job_manager_notices_nonce', '_wpjm_notice_nonce' );
+	}
+
+	/**
+	 * Get URL for a custom action for a notice.
+	 *
+	 * @param string $action_name Name of action.
+	 * @param string $dismiss_notice Optional notice ID, if this action should also dismiss the notice.
+	 * @return string
+	 */
+	public static function get_action_url( $action_name, $dismiss_notice = null ) {
+
+		$base_url = '';
+
+		if ( $dismiss_notice ) {
+			$base_url = self::get_dismiss_url( $dismiss_notice );
+		}
+
+		return wp_nonce_url( add_query_arg( [ 'wpjm_notice_action' => $action_name ], $base_url ), 'job_manager_notices_nonce', '_wpjm_notice_nonce' );
 	}
 
 	/**
@@ -595,13 +682,8 @@ class WP_Job_Manager_Admin_Notices {
 			$notice['actions'] = [];
 		}
 
-		$notice_class  = [];
-		$notice_levels = [ 'error', 'warning', 'success', 'info', 'upsell' ];
-		if ( isset( $notice['level'] ) && in_array( $notice['level'], $notice_levels, true ) ) {
-			$notice_class[] = 'wpjm-admin-notice--' . $notice['level'];
-		} else {
-			$notice_class[] = 'wpjm-admin-notice--info';
-		}
+		$notice_class   = [];
+		$notice_class[] = 'wpjm-admin-notice--' . ( $notice['level'] ?? 'info' );
 
 		$is_dismissible       = $notice['dismissible'] ?? true;
 		$notice_wrapper_extra = '';
@@ -625,6 +707,11 @@ class WP_Job_Manager_Admin_Notices {
 			echo '<img src="' . esc_url( self::get_icon( $notice['icon'] ) ) . '" class="wpjm-admin-notice__icon" alt="WP Job Manager Icon" />';
 		}
 		echo '<div class="wpjm-admin-notice__message">';
+		if ( ! empty( $notice['label'] ) ) {
+			echo '<div class="wpjm-admin-notice__label">';
+			echo wp_kses( $notice['label'], self::ALLOWED_HTML );
+			echo '</div>';
+		}
 		if ( ! empty( $notice['heading'] ) ) {
 			echo '<div class="wpjm-admin-notice__heading">';
 			echo wp_kses( $notice['heading'], self::ALLOWED_HTML );
@@ -639,7 +726,7 @@ class WP_Job_Manager_Admin_Notices {
 					continue;
 				}
 
-				$button_class = ! isset( $action['primary'] ) || $action['primary'] ? 'is-primary' : 'is-outline';
+				$button_class = $action['class'] ?? ( ! isset( $action['primary'] ) || $action['primary'] ? 'is-primary' : 'is-outline' );
 
 				echo '<a href="' . esc_url( $action['url'] ) . '" target="' . esc_attr( $action['target'] ?? '_self' ) . '" rel="noopener noreferrer" class="wpjm-button ' . esc_attr( $button_class ) . '">';
 				echo esc_html( $action['label'] );
@@ -652,6 +739,12 @@ class WP_Job_Manager_Admin_Notices {
 		}
 		echo '</div>';
 		echo '</div>';
+
+		if ( ! empty( $notice['image'] ) ) {
+			echo '<div class="wpjm-admin-notice__image">';
+			echo '<img src="' . esc_url( $notice['image'] ) . '" alt="" />';
+			echo '</div>';
+		}
 
 		if ( ! empty( $notice['extra_details'] ) ) {
 			echo '<div class="wpjm-admin-notice__extra_details">';

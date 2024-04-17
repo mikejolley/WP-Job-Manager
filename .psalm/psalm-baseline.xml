@@ -204,9 +204,6 @@
     <InvalidReturnStatement>
       <code><![CDATA[new WP_Error( 'error', $e->getMessage() )]]></code>
     </InvalidReturnStatement>
-    <ParadoxicalCondition>
-      <code><![CDATA[! defined( 'ABSPATH' )]]></code>
-    </ParadoxicalCondition>
   </file>
   <file src="includes/class-wp-job-manager-install.php">
     <UndefinedPropertyFetch>
