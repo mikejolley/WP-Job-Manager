@@ -198,4 +198,6 @@ jQuery(document).ready(function($) {
 	});
 });
 
-initializePromoteModals();
+if ( job_manager_admin_params.promoted_jobs_enabled ) {
+	initializePromoteModals();
+}
