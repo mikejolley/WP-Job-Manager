@@ -50,5 +50,8 @@
     "platform": {
       "php": "7.4"
     }
+  },
+  "require": {
+    "pelago/emogrifier": "^7.2"
   }
 }
