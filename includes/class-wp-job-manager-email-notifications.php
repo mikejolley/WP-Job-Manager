@@ -950,12 +950,12 @@ final class WP_Job_Manager_Email_Notifications {
 	/**
 	 * Gets the CSS styles to be used in email notifications.
 	 *
-	 * @return bool|string
+	 * @return string
 	 */
 	private static function get_styles() {
 		$email_styles_template = self::locate_template_file( 'email-styles' );
 		if ( ! file_exists( $email_styles_template ) ) {
-			return false;
+			return '';
 		}
 		ob_start();
 		include $email_styles_template;
