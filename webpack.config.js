@@ -1,5 +1,5 @@
-const defaultConfig = require('@wordpress/scripts/config/webpack.config');
-const path = require('path');
+const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+const path = require( 'path' );
 
 const files = {
 	'js/admin': 'js/admin.js',
@@ -9,6 +9,7 @@ const files = {
 	'js/job-application': 'js/job-application.js',
 	'js/job-dashboard': 'js/job-dashboard.js',
 	'js/job-submission': 'js/job-submission.js',
+	'js/ui-theme-support': 'js/ui-theme-support.js',
 	'js/multiselect': 'js/multiselect.js',
 	'js/term-multiselect': 'js/term-multiselect.js',
 	'js/wpjm-stats': 'js/wpjm-stats.js',
@@ -30,14 +31,14 @@ const files = {
 
 const baseDist = 'assets/dist/';
 
-Object.keys(files).forEach(function (key) {
-	files[key] = path.resolve('./assets', files[key]);
-});
+Object.keys( files ).forEach( function ( key ) {
+	files[ key ] = path.resolve( './assets', files[ key ] );
+} );
 
 module.exports = {
 	...defaultConfig,
 	entry: files,
 	output: {
-		path: path.resolve('.', baseDist),
+		path: path.resolve( '.', baseDist ),
 	},
 };

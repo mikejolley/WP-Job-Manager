@@ -131,7 +131,7 @@
 .jm-job-stats {
 
 	--jm-stat-color-page-view: var(--jm-ui-accent-color);
-	--jm-stat-color-unique-view: color-mix(in srgb, #000, var(--jm-stat-color-page-view) 40%);
+	--jm-stat-color-unique-view: var(--jm-ui-accent-alt-color);
 }
 
 .jm-job-stat-details {

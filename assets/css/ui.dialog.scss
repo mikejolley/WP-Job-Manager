@@ -21,6 +21,7 @@
 }
 
 .jm-dialog {
+	font-family: var(--jm-ui-font-family);
 	font-size: var(--jm-ui-font-size);
 	--jm-dialog-padding: var(--jm-ui-space-l);
 }
@@ -54,6 +55,9 @@
 	overflow: auto;
 	overscroll-behavior: contain;
 
+	a:where(:not(:hover):not(:active):not(:focus)) {
+		color: var(--jm-ui-accent-color, #1a1a1a);
+	}
 }
 .jm-dialog-modal-container {
 	position: relative;
