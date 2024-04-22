@@ -31,7 +31,7 @@ class Job_Overlay {
 	public function __construct() {
 		add_action( 'job_manager_ajax_job_dashboard_overlay', [ $this, 'ajax_job_overlay' ] );
 		add_action( 'wp_ajax_job_dashboard_overlay', [ $this, 'ajax_job_overlay' ] );
-		add_action( 'admin_footer', [ $this, 'init_admin_dashboard_overlay' ], 10 );
+		add_action( 'current_screen', [ $this, 'init_admin_dashboard_overlay' ], 10 );
 		add_action( 'job_manager_job_overlay_footer', [ $this, 'output_footer_actions' ], 10 );
 
 	}
@@ -85,7 +85,6 @@ class Job_Overlay {
 	 */
 	public function output_modal_element() {
 
-		UI::instance()->enqueue_styles();
 		wp_enqueue_style( 'wp-job-manager-job-dashboard' );
 		wp_enqueue_script( 'wp-job-manager-job-dashboard' );
 
@@ -131,6 +130,11 @@ class Job_Overlay {
 	 * @return void
 	 */
 	public function init_admin_dashboard_overlay() {
+
+		if ( ! Stats::is_enabled() ) {
+			return;
+		}
+
 		$screen = get_current_screen();
 
 		if ( ! $screen || 'edit-job_listing' !== $screen->id ) {
@@ -138,7 +142,7 @@ class Job_Overlay {
 		}
 
 		$this->init_dashboard_overlay();
-		$this->output_modal_element();
+		add_action( 'admin_footer', [ $this, 'output_modal_element' ] );
 	}
 
 	/**
@@ -150,6 +154,7 @@ class Job_Overlay {
 	 */
 	public function init_dashboard_overlay() {
 
+		UI::ensure_styles();
 		\WP_Job_Manager::register_script( 'wp-job-manager-job-dashboard', 'js/job-dashboard.js', null, true );
 		\WP_Job_Manager::register_style( 'wp-job-manager-job-dashboard', 'css/job-dashboard.css', [ 'wp-job-manager-ui' ] );
 
