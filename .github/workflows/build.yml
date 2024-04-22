@@ -40,7 +40,7 @@ jobs:
       - name: Build Plugin
         run: npm run build
       - name: Decompress plugin
-        run: unzip wp-job-manager.zip -d wp-job-manager
+        run: unzip build/wp-job-manager.zip -d wp-job-manager
       - name: Store Artifact
         uses: actions/upload-artifact@v2
         with:

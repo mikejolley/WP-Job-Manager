@@ -34,7 +34,7 @@
     "zx": "^7.2.3"
   },
   "scripts": {
-    "build": "npm run build:assets && npm run archive",
+    "build": "./scripts/build-plugin.sh",
     "build:assets": "wp-scripts build",
     "build:vendor": "cp ./node_modules/select2/dist/css/select2.min.css ./node_modules/select2/dist/js/select2.full.min.js ./assets/lib/select2",
     "archive": "composer archive --file=$npm_package_name --format=zip",
