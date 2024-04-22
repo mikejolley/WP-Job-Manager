@@ -32,7 +32,6 @@ class Job_Overlay {
 		add_action( 'job_manager_ajax_job_dashboard_overlay', [ $this, 'ajax_job_overlay' ] );
 		add_action( 'wp_ajax_job_dashboard_overlay', [ $this, 'ajax_job_overlay' ] );
 		add_action( 'admin_footer', [ $this, 'init_admin_dashboard_overlay' ], 10 );
-		add_action( 'job_manager_job_dashboard', [ $this, 'init_dashboard_overlay' ], 10 );
 		add_action( 'job_manager_job_overlay_footer', [ $this, 'output_footer_actions' ], 10 );
 
 	}
@@ -139,6 +138,7 @@ class Job_Overlay {
 		}
 
 		$this->init_dashboard_overlay();
+		$this->output_modal_element();
 	}
 
 	/**
@@ -167,8 +167,6 @@ class Job_Overlay {
 				'statsEnabled'      => \WP_Job_Manager\Stats::is_enabled(),
 			]
 		);
-
-		$this->output_modal_element();
 	}
 
 	/**
