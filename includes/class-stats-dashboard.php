@@ -10,7 +10,7 @@ namespace WP_Job_Manager;
 /**
  * Job listing stats for the jobs dashboard.
  *
- * @since $$next-version$$
+ * @since 2.3.0
  */
 class Stats_Dashboard {
 

@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * WP_Job_Manager_Recaptcha class.
  *
- * @since $$next-version$$
+ * @since 2.3.0
  */
 class WP_Job_Manager_Recaptcha {
 
@@ -233,7 +233,7 @@ class WP_Job_Manager_Recaptcha {
 			 *
 			 * The score tolerance determines how strict the reCAPTCHA v3 validation is. A higher tolerance allows more leniency in accepting scores. A higher score means more certainty that the user is human.
 			 *
-			 * @since $$next-version$$
+			 * @since 2.3.0
 			 *
 			 * @param float $score_tolerance The score tolerance value. Default is 0.5.
 			 */

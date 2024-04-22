@@ -107,7 +107,7 @@ class UI {
 		 *
 		 * @param string|false $color CSS color definition.
 		 *
-		 * @since $$next-version$$
+		 * @since 2.3.0
 		 */
 		$vars['--jm-ui-accent-color'] = apply_filters( 'job_manager_ui_accent_color', $vars['--jm-ui-accent-color'] ?? false );
 

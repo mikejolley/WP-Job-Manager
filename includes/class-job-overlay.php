@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Job details overlay.
  *
- * @since $$next-version$$
+ * @since 2.3.0
  */
 class Job_Overlay {
 
