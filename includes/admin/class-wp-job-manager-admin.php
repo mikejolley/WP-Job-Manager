@@ -178,10 +178,8 @@ class WP_Job_Manager_Admin {
 			}
 		}
 
-		if ( $this->are_promoted_jobs_enabled ) {
-			WP_Job_manager::register_script( 'job_manager_notice_dismiss', 'js/admin/wpjm-notice-dismiss.js', null, true );
-			wp_enqueue_script( 'job_manager_notice_dismiss' );
-		}
+		WP_Job_manager::register_script( 'job_manager_notice_dismiss', 'js/admin/wpjm-notice-dismiss.js', null, true );
+		wp_enqueue_script( 'job_manager_notice_dismiss' );
 
 		WP_Job_Manager::register_style( 'job_manager_admin_menu_css', 'css/menu.css', [] );
 		wp_enqueue_style( 'job_manager_admin_menu_css' );
