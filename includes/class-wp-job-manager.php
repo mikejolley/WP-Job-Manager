@@ -86,7 +86,17 @@ class WP_Job_Manager {
 		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-data-exporter.php';
 		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/admin/class-wp-job-manager-settings.php';
 		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-com-api.php';
-		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/promoted-jobs/class-wp-job-manager-promoted-jobs.php';
+
+		/**
+		 * Controls whether promoted jobs are enabled.
+		 *
+		 * @since $$next-version$$
+		 *
+		 * @param bool $enable_promoted_jobs Whether promoted jobs are enabled.
+		 */
+		if ( apply_filters( 'job_manager_enable_promoted_jobs', true ) ) {
+			include_once JOB_MANAGER_PLUGIN_DIR . '/includes/promoted-jobs/class-wp-job-manager-promoted-jobs.php';
+		}
 
 		if ( is_admin() ) {
 			include_once JOB_MANAGER_PLUGIN_DIR . '/includes/admin/class-wp-job-manager-admin.php';
@@ -267,7 +277,7 @@ class WP_Job_Manager {
 		if ( ! wp_next_scheduled( 'job_manager_email_daily_notices' ) ) {
 			wp_schedule_event( time(), 'daily', 'job_manager_email_daily_notices' );
 		}
-		if ( ! wp_next_scheduled( WP_Job_Manager_Promoted_Jobs_Status_Handler::CRON_HOOK ) ) {
+		if ( class_exists( 'WP_Job_Manager_Promoted_Jobs_Status_Handler' ) && ! wp_next_scheduled( WP_Job_Manager_Promoted_Jobs_Status_Handler::CRON_HOOK ) ) {
 			wp_schedule_event( time(), 'hourly', WP_Job_Manager_Promoted_Jobs_Status_Handler::CRON_HOOK );
 		}
 	}
