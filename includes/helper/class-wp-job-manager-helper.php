@@ -985,6 +985,8 @@ class WP_Job_Manager_Helper {
 			true === $remote['success']
 		) {
 			$this->add_success( $product_slug, __( 'The license has been synced properly.', 'wp-job-manager' ) );
+			// Clear the options cache to make the product appear in the correct place.
+			wp_cache_delete( 'alloptions', 'options' );
 			return;
 		}
 		$this->add_error( $product_slug, __( 'There was an error while syncing the license.', 'wp-job-manager' ) );
