@@ -69,6 +69,7 @@ const uiVariables = {
 			return '#fff';
 		},
 		value: null,
+		default: '#ffffff',
 	},
 	/**
 	 * Adjust the red danger/error color to be legible on dark backgrounds.

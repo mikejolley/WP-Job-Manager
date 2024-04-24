@@ -55,7 +55,7 @@
 	overflow: auto;
 	overscroll-behavior: contain;
 
-	a:where(:not(:hover):not(:active):not(:focus)) {
+	body & a:not(:hover):not(:active):not(:focus) {
 		color: var(--jm-ui-accent-color, #1a1a1a);
 	}
 }
