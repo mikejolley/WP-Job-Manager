@@ -934,8 +934,7 @@ final class WP_Job_Manager_Email_Notifications {
 	 * @return string
 	 */
 	private static function inject_styles( $content ) {
-		$css_inliner_class = CssInliner::class;
-		if ( class_exists( $css_inliner_class ) ) {
+		if ( class_exists( CssInliner::class ) ) {
 			try {
 				$dom_document = CssInliner::fromHtml( $content )->inlineCss( self::get_styles() )->getDomDocument();
 				$content      = CssToAttributeConverter::fromDomDocument( $dom_document )->convertCssToVisualAttributes()->render();
