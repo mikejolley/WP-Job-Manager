@@ -70,6 +70,9 @@ class UI {
 		if ( $this->has_ui || wp_style_is( 'wp-job-manager-ui', 'enqueued' ) ) {
 			wp_enqueue_style( 'wp-job-manager-ui' );
 
+			/**
+			 * Filter whether to load the script that detects theme colors and styles for the plugin's UI elements.
+			 */
 			if ( apply_filters( 'job_manager_ui_theme_support_script', true ) ) {
 				wp_enqueue_script( 'wp-job-manager-ui-theme-support' );
 			}
