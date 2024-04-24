@@ -37,7 +37,6 @@
     "build": "./scripts/build-plugin.sh",
     "build:assets": "wp-scripts build",
     "build:vendor": "cp ./node_modules/select2/dist/css/select2.min.css ./node_modules/select2/dist/js/select2.full.min.js ./assets/lib/select2",
-    "archive": "composer archive --file=$npm_package_name --format=zip",
     "postarchive": "rm -rf $npm_package_name && unzip $npm_package_name.zip -d $npm_package_name && rm $npm_package_name.zip && zip -r $npm_package_name.zip $npm_package_name && rm -rf $npm_package_name",
     "check-engines": "wp-scripts check-engines",
     "check-licenses": "wp-scripts check-licenses",
