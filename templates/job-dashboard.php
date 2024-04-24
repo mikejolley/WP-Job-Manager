@@ -69,10 +69,13 @@ $submit_job_form_page_id = get_option( 'job_manager_submit_job_form_page_id' );
 		<?php else : ?>
 			<div class="jm-dashboard-header">
 				<?php foreach ( $job_dashboard_columns as $key => $column ) : ?>
-					<div
-						class="jm-dashboard-job-column jm-dashboard-job-column-label <?php echo esc_attr( $key ); ?>"><?php echo esc_html( $column ); ?></div>
+					<div class="jm-dashboard-job-column jm-dashboard-job-column-label <?php echo esc_attr( $key ); ?>">
+						<?php echo esc_html( $column ); ?>
+					</div>
 				<?php endforeach; ?>
-				<div class="jm-dashboard-job-column jm-dashboard-job-column-label actions"><?php esc_html_e( 'Actions', 'wp-job-manager' ); ?></div>
+				<div class="jm-dashboard-job-column jm-dashboard-job-column-label actions">
+					<?php esc_html_e( 'Actions', 'wp-job-manager' ); ?>
+				</div>
 			</div>
 			<div class="jm-dashboard-rows">
 				<?php foreach ( $jobs as $job ) : ?>
@@ -80,8 +83,7 @@ $submit_job_form_page_id = get_option( 'job_manager_submit_job_form_page_id' );
 						<?php foreach ( $job_dashboard_columns as $key => $column ) : ?>
 							<div class="jm-dashboard-job-column <?php echo esc_attr( $key ); ?>"
 								aria-label="<?php echo esc_attr( $column ); ?>">
-								<div
-									class="jm-dashboard-job-column-label"><?php echo esc_html( $column ); ?></div>
+								<div class="jm-dashboard-job-column-label"><?php echo esc_html( $column ); ?></div>
 								<?php do_action( 'job_manager_job_dashboard_column_' . $key, $job ); ?>
 							</div>
 						<?php endforeach; ?>

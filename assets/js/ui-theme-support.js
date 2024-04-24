@@ -100,7 +100,11 @@ function applyThemeStyles() {
 	for ( const [ key, color ] of Object.entries( uiVariables ) ) {
 		let value = style.getPropertyValue( key );
 
-		const hasCustomValue = color.default ? color.default !== value : !! value;
+		let hasCustomValue = !! value;
+
+		if ( color.default ) {
+			hasCustomValue = color.default !== value;
+		}
 
 		if ( ! hasCustomValue ) {
 			value = color.init( ThemeStyles.get() );
@@ -142,12 +146,9 @@ const ThemeStyles = {
 		this.linkColor = Color.parse( getComputedStyle( linkTag ).color );
 		this.textColor = Color.parse( getComputedStyle( textTag ).color );
 		this.backgroundColor = Color.parse( getComputedStyle( document.body ).backgroundColor );
-		this.calculate();
 		postTag.remove();
 
 		this.bodyFontFamily = getComputedStyle( document.body ).fontFamily;
-	},
-	calculate() {
 		this.darkMode = this.textColor.l > 0.8;
 	},
 	get() {
