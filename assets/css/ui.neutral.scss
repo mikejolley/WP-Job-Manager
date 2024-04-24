@@ -1,5 +1,5 @@
 
-:root {
+:where(:root) {
 	--jm-ui-border-light: #{fadeCurrentColor(15%)};
 	--jm-ui-border-faint: #{fadeCurrentColor(5%)};
 	--jm-ui-border-strong: currentColor;

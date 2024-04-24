@@ -114,6 +114,9 @@ class UI {
 		$css = ':root {';
 
 		foreach ( $vars as $name => $value ) {
+			if ( empty( $value ) ) {
+				continue;
+			}
 			$css .= esc_attr( $name ) . ': ' . esc_attr( $value ) . ';';
 		}
 
