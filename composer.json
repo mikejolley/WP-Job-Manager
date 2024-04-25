@@ -17,32 +17,6 @@
     "vimeo/psalm": "^5.13",
     "php-stubs/wordpress-stubs": "^6.4"
   },
-  "archive": {
-    "exclude": [
-      "/*",
-      "!/assets/dist",
-      "!/assets/images",
-      "!/assets/lib",
-      "/assets/dist/css/*.js",
-      "!/includes",
-      "!/languages",
-      "!/lib",
-      "!/templates",
-      "!/changelog.txt",
-      "!/LICENSE",
-      "!/readme.txt",
-      "!/uninstall.php",
-      "!/wp-job-manager.php",
-      "!/wp-job-manager-autoload.php",
-      "!/wp-job-manager-deprecated.php",
-      "!/wp-job-manager-functions.php",
-      "!/wp-job-manager-template.php",
-      "!/wpml-config.xml",
-      ".DS_Store",
-      ".*",
-      "*.test.js"
-    ]
-  },
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
@@ -50,5 +24,8 @@
     "platform": {
       "php": "7.4"
     }
+  },
+  "require": {
+    "pelago/emogrifier": "^7.2"
   }
 }

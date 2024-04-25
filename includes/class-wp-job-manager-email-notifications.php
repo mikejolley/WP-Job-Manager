@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Pelago\Emogrifier\CssInliner;
+use Pelago\Emogrifier\HtmlProcessor\CssToAttributeConverter;
 /**
  * Base class for WP Job Manager's email notification system.
  *
@@ -164,9 +166,8 @@ final class WP_Job_Manager_Email_Notifications {
 		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/emails/class-wp-job-manager-email-employer-expiring-job.php';
 		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/emails/class-wp-job-manager-email-admin-expiring-job.php';
 
-		if ( ! class_exists( 'Emogrifier' ) && class_exists( 'DOMDocument' ) && version_compare( PHP_VERSION, '5.5', '>=' ) ) {
-			include_once JOB_MANAGER_PLUGIN_DIR . '/lib/emogrifier/class-emogrifier.php';
-		}
+		// Load Vendor Autoload.
+		require_once JOB_MANAGER_PLUGIN_DIR . '/vendor/autoload.php';
 	}
 
 	/**
@@ -933,10 +934,11 @@ final class WP_Job_Manager_Email_Notifications {
 	 * @return string
 	 */
 	private static function inject_styles( $content ) {
-		if ( class_exists( 'Emogrifier' ) ) {
+		if ( class_exists( CssInliner::class ) ) {
 			try {
-				$emogrifier = new Emogrifier( $content, self::get_styles() );
-				$content    = $emogrifier->emogrify();
+				$dom_document = CssInliner::fromHtml( $content )->inlineCss( self::get_styles() )->getDomDocument();
+				$content      = CssToAttributeConverter::fromDomDocument( $dom_document )->convertCssToVisualAttributes()->render();
+
 			} catch ( Exception $e ) {
 				trigger_error( 'Unable to inject styles into email notification: ' . $e->getMessage() ); // @codingStandardsIgnoreLine
 			}
@@ -947,12 +949,12 @@ final class WP_Job_Manager_Email_Notifications {
 	/**
 	 * Gets the CSS styles to be used in email notifications.
 	 *
-	 * @return bool|string
+	 * @return string
 	 */
 	private static function get_styles() {
 		$email_styles_template = self::locate_template_file( 'email-styles' );
 		if ( ! file_exists( $email_styles_template ) ) {
-			return false;
+			return '';
 		}
 		ob_start();
 		include $email_styles_template;

@@ -402,21 +402,6 @@
       <code><![CDATA[! defined( 'ABSPATH' )]]></code>
     </ParadoxicalCondition>
   </file>
-  <file src="lib/emogrifier/class-emogrifier.php">
-    <InvalidArgument>
-      <code><![CDATA[function ($matches) use (&$media) {
-				$media .= $matches[0];
-			}]]></code>
-      <code><![CDATA[usort($cssRules, [$this, 'sortBySelectorPrecedence'])]]></code>
-    </InvalidArgument>
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->caches[self::CACHE_KEY_CSS][$cssKey]]]></code>
-      <code><![CDATA[$this->caches[self::CACHE_KEY_SELECTOR][$selectorKey]]]></code>
-    </InvalidReturnStatement>
-    <RedundantCondition>
-      <code><![CDATA[$node->parentNode && is_callable([$node->parentNode, 'removeChild'])]]></code>
-    </RedundantCondition>
-  </file>
   <file src="lib/usage-tracking/class-wp-job-manager-usage-tracking-base.php">
     <FalsableReturnStatement>
       <code>false</code>
