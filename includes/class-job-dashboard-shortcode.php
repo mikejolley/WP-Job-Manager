@@ -153,6 +153,13 @@ class Job_Dashboard_Shortcode {
 			$job_actions[ $job->ID ] = $this->get_job_actions( $job );
 		}
 
+		/**
+		 * Output content before the job dashboard.
+		 *
+		 * @param \WP_Query $jobs The jobs displayed.
+		 */
+		do_action( 'job_manager_job_dashboard_before', $jobs );
+
 		get_job_manager_template(
 			'job-dashboard.php',
 			[
@@ -164,7 +171,14 @@ class Job_Dashboard_Shortcode {
 			]
 		);
 
-		do_action( 'job_manager_job_dashboard', $jobs );
+		Job_Overlay::instance()->output_modal_element();
+
+		/**
+		 * Output content after the job dashboard.
+		 *
+		 * @param \WP_Query $jobs The jobs displayed.
+		 */
+		do_action( 'job_manager_job_dashboard_after', $jobs );
 
 		return ob_get_clean();
 	}

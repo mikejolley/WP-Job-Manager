@@ -582,8 +582,6 @@ class WP_Job_Manager {
 			]
 		);
 
-		Job_Overlay::instance()->init_dashboard_overlay();
-
 		wp_localize_script(
 			'wp-job-manager-job-submission',
 			'job_manager_job_submission',

@@ -1,4 +1,8 @@
 
+.jm-ui {
+	font-family: var(--jm-ui-font-family);
+}
+
 .jm-ui-row {
 	display: flex;
 	gap: var(--jm-ui-space-xs);
@@ -26,6 +30,7 @@
 	text-decoration: none;
 	outline: unset;
 	cursor: pointer;
+	border: unset;
 }
 
 .jm-ui-button,
@@ -51,6 +56,14 @@
 	}
 }
 
+a[href].jm-ui-button,
+a[href].jm-ui-button--outline,
+a[href].jm-ui-button--icon {
+	html body & {
+		text-decoration: none;
+	}
+}
+
 .jm-ui-button {
 	border: 1px solid currentColor;
 
@@ -67,13 +80,10 @@
 	}
 }
 
-.jm-ui-button--small,
+.jm-ui-button--small
 {
-	padding: var(--jm-ui-space-xxs) var(--jm-ui-space-s);
 	gap: var(--jm-ui-space-xs);
 	font-size: var(--jm-ui-font-size-s);
-	font-weight: 400;
-	letter-spacing: -0.1px;
 }
 
 .jm-ui-button__a {
@@ -83,6 +93,10 @@
 .jm-ui-button--outline {
 	background: unset;
 	border: 1px solid currentColor;
+
+	&:hover, &:focus {
+		border: 1px solid currentColor;
+	}
 }
 
 .jm-ui-button--icon {
@@ -238,7 +252,7 @@
 	font-size: var(--jm-ui-font-size-s);
 	text-align: left;
 	white-space: nowrap;
-
+	line-height: 1.5;
 	display: flex;
 	flex-direction: column;
 }

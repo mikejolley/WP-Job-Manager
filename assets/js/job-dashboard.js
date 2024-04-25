@@ -2,8 +2,6 @@
 
 import domReady from '@wordpress/dom-ready';
 
-import './ui';
-
 // eslint-disable-next-line camelcase
 const { i18nConfirmDelete, overlayEndpoint, statsEnabled } = job_manager_job_dashboard;
 

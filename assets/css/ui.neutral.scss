@@ -1,5 +1,5 @@
 
-:root {
+:where(:root) {
 	--jm-ui-border-light: #{fadeCurrentColor(15%)};
 	--jm-ui-border-faint: #{fadeCurrentColor(5%)};
 	--jm-ui-border-strong: currentColor;
@@ -17,14 +17,16 @@
 
 	--jm-ui-faint-color: #{fadeCurrentColor(2.5%)};
 	--jm-ui-accent-color: inherit;
+	--jm-ui-accent-alt-color: inherit;
 	--jm-ui-danger-color: #cc1818;
-	--jm-ui-error-color: #cc1818;
+	--jm-ui-danger-color-dark-mode: #f86c80;
+	--jm-ui-error-color: var(--jm-ui-danger-color);
 	--jm-ui-info-color: #4e71ec;
 	--jm-ui-success-color: #4ab866;
 	--jm-ui-accent-color-contrast: #ffffff;
 
 	--jm-ui-button-color: var(--jm-ui-accent-color, inherit);
-	--jm-ui-button-contrast: var(--jm-ui-accent-color-contrast, #ffffff);
+	--jm-ui-button-color-contrast: var(--jm-ui-accent-color-contrast, #ffffff);
 	--jm-ui-link-color: var(--jm-ui-accent-color, inherit);
 
 	--jm-ui-notice-error: var(--jm-ui-danger-color);
@@ -50,6 +52,7 @@
 	--jm-ui-space-xl: calc(16 * var(--jm-ui-space-base)); // 64px
 	--jm-ui-space-xxl: calc(24 * var(--jm-ui-space-base)); // 96px
 
+	--jm-ui-font-family: inherit;
 	--jm-ui-font-size: 16px;
 	--jm-ui-font-size-m: 14px;
 	--jm-ui-font-size-s: 12px;

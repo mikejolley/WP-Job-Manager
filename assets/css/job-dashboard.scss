@@ -2,10 +2,14 @@
 @import 'mixins';
 @import 'job-overlay';
 
-.jm-dashboard {
+.jm-dashboard-table {
+	container-name: jm-dashboard-table;
 	container-type: inline-size;
-
 	--jm-dashboard-company-logo-size: calc(var(--jm-ui-icon-size) + 2 * var(--jm-ui-space-xs));
+
+	&.jm-dashboard-table--large {
+		container-name: jm-dashboard-table-large;
+	}
 }
 
 .jm-dashboard-job, .jm-dashboard-header {
@@ -42,14 +46,10 @@
 .jm-dashboard-job-column {
 	flex: 1 1 calc(50% - var(--jm-ui-space-sm));
 	min-width: 0;
-}
-
-.jm-dashboard small {
-	font-size: var(--jm-ui-font-size-s);
-}
-
-.jm-dashboard .job_title {
-	flex: 1 1 200%;
+	line-height: 1.2;
+	small {
+		white-space: nowrap;
+	}
 }
 
 .jm-dashboard-job-column.company {
@@ -80,10 +80,6 @@
 		width: var(--jm-ui-icon-size-s);
 		height: var(--jm-ui-icon-size-s);
 	}
-
-	.job-status-rejected {
-		color: var(--jm-ui-error-color);
-	}
 }
 
 .jm-dashboard img.company_logo {
@@ -92,25 +88,45 @@
 	object-fit: contain;
 }
 
-
 .jm-dashboard-job-column.actions {
-	flex: 0.5 1 100%;
 	text-align: right;
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	gap: var(--jm-ui-space-m);
+	gap: var(--jm-ui-space-s);
 }
 
 .jm-dashboard-job-column a.job-title {
 	font-weight: 600;
 	font-size: var(--jm-ui-font-size);
-	line-height: 1.2;
 	text-decoration: unset;
 }
 
 .jm-dashboard-job-column a.job-title:hover {
 	text-decoration: underline;
+}
+
+.jm-dashboard-job-column-label {
+	text-transform: uppercase;
+	font-size: var(--jm-ui-font-size-s);
+	font-weight: 200;
+	color: fadeCurrentColor( 70% );
+}
+
+.jm-dashboard-job .jm-dashboard-job-column-label {
+	display: none;
+}
+
+.jm-dashboard small {
+	font-size: var(--jm-ui-font-size-s);
+}
+
+.jm-dashboard-table .job_title {
+	flex: 1 1 200%;
+}
+
+.jm-dashboard-table--large .job_title {
+	flex: 1 1 150%;
 }
 
 .jm-dashboard-action {
@@ -126,12 +142,33 @@
 	color: inherit;
 }
 
-.job-dashboard-action-delete {
+.jm-dashboard .job-dashboard-action-delete {
 	color: var(--jm-ui-danger-color);
 }
 
-@container (width < 540px)
-{
+.jm-dashboard .job-manager-pagination {
+	ul.page-numbers {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		font-size: var(--jm-ui-font-size);
+		border: unset;
+		gap: 12px;
+	}
+	li {
+		min-width: 32px;
+		text-align: center;
+		border: 1px solid var(--jm-ui-border-light);
+		border-radius: 2px;
+
+	}
+}
+
+@mixin jm-dashboard-job-mobile {
+	.jm-dashboard-job-column:where(:not(.job_title):not(.actions):not(.company)) .jm-dashboard-job-column-label  {
+		display: block;
+	}
 	.jm-dashboard-job {
 		flex-wrap: wrap;
 		align-items: flex-start;
@@ -148,5 +185,29 @@
 	.jm-dashboard-job-column.company ~ .jm-dashboard-job-column.job_title {
 		flex-basis: calc( 100% - var(--jm-dashboard-company-logo-size) - var(--jm-ui-space-sm) );
 		order: -1;
+	}
+
+}
+
+@container jm-dashboard-table-large (width < 940px)
+{
+	.jm-dashboard-job-column.job_title {
+		flex-basis: 100%;
+	}
+}
+
+@container jm-dashboard-table (width < 540px)
+{
+	@include jm-dashboard-job-mobile;
+}
+@container jm-dashboard-table-large (width < 780px)
+{
+	@include jm-dashboard-job-mobile;
+}
+
+@container jm-dashboard-table-large (540px < width < 780px)
+{
+	.jm-dashboard-job-column {
+		flex: 1 1 calc(33% - 2 * var(--jm-ui-space-sm));
 	}
 }
