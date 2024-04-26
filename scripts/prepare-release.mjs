@@ -49,7 +49,7 @@ try {
 	updateVersionInFile( pluginFileName );
 	updateVersionInFile( 'readme.txt' );
 	replaceNextVersionPlaceholder();
-	updatePackageJsonFiles();
+	// updatePackageJsonFiles();
 	generatePotFiles();
 	commitFiles();
 
