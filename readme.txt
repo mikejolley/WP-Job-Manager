@@ -147,6 +147,31 @@ You can view (and contribute) translations via the [translate.wordpress.org](htt
 
 == Changelog ==
 
+### 2.3.0 - 2024-04-26
+New!
+
+* Job Statistics — enable insights like job listing page views, unique visits and search impressions to be collected and displayed to employers in the jobs dashboard.
+* Add Google reCAPTCHA v3 support
+
+Improvements: 
+
+* New: Job statistics overlay
+* Change: Redesign job dashboard
+* Change: Allow job duplication in the job dashboard for any job 
+* Security: Don't return unpublished jobs only in the promote job endpoint
+* Fix renewals for WordPress.com licenses
+* Fix issues with rich e-mails on some e-mail providers
+* Fix e-mail styling in some e-mail clients  
+* Fix expiry date not showing up in backend editor
+* Fix: Add fallback to date format in case it's missing
+* Fix: Prevent past dates from being used in the datepicker
+
+For developers:
+
+* Add filter to disable promoted jobs
+* Add placeholder options to select field
+* Job dashboard template has been rewritten
+
 ### 2.2.2 - 2024-02-15
 * Fix issue with rich e-mails on some e-mail providers (#2753)
 * Fix: 'featured_first' argument now works when 'show_filters' is set to false.
@@ -183,7 +208,4 @@ Fixes:
 ### 2.1.1 - 2023-11-21
 * Fix link to extensions page (#2650)
 * Update Twitter to the new X logo
-
-### 2.1.0 - 2023-11-17
-* Fix: Remove public update endpoint and add nonce check (#2642)
 
