@@ -98,7 +98,7 @@ function setWorkflowStepOutput() {
 }
 
 async function createGithubRelease() {
-	const pluginZip = `${ pluginSlug }.zip`
+	const pluginZip = `build/${ pluginSlug }.zip`
 	await $`gh release create ${ pluginVersion } -R ${ plugin.repo } --title ${ `Version ${ pluginVersion }` } --notes ${ releaseNotes } ${ pluginZip }`
 }
 
