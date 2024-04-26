@@ -93,7 +93,7 @@ class WP_Job_Manager_Helper_REST_API {
 	 *
 	 * @param \WP_REST_Request $request The current request.
 	 *
-	 * @return \WP_REST_Response
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function receive_wpcom_license_key( $request ) {
 		$license_key  = sanitize_text_field( $request->get_param( 'license_key' ) );
