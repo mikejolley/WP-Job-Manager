@@ -37,13 +37,13 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           node scripts/create-release.mjs wp-job-manager ${{ github.event.number }}
-          unzip -q wp-job-manager.zip
+          cd build && unzip -q wp-job-manager.zip
       - name: Deploy to WordPress.org
         uses: 10up/action-wordpress-plugin-deploy@abb939a0d0bfd01063e8d1933833209201557381
         env:
           SVN_PASSWORD: ${{ secrets.WORDPRESSORG_SVN_PASSWORD }}
           SVN_USERNAME: ${{ secrets.WORDPRESSORG_SVN_USERNAME }}
-          BUILD_DIR: wp-job-manager
+          BUILD_DIR: build/wp-job-manager
           SLUG: wp-job-manager
           VERSION: ${{ steps.create_release.outputs.version }}
       - name: Comment on PR
