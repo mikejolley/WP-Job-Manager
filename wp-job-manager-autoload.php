@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Autoload plugin classes.
  *
- * @since $$next-version$$
+ * @since 2.3.0
  */
 class WP_Job_Manager_Autoload {
 

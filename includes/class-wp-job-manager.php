@@ -90,7 +90,7 @@ class WP_Job_Manager {
 		/**
 		 * Controls whether promoted jobs are enabled.
 		 *
-		 * @since $$next-version$$
+		 * @since 2.3.0
 		 *
 		 * @param bool $enable_promoted_jobs Whether promoted jobs are enabled.
 		 */

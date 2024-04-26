@@ -20,7 +20,7 @@ require_once __DIR__ . '/class-job-overlay.php';
 /**
  * Job Dashboard Shortcode.
  *
- * @since $$next-version$$
+ * @since 2.3.0
  */
 class Job_Dashboard_Shortcode {
 
