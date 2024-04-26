@@ -1,8 +1,8 @@
 === WP Job Manager ===
 Contributors: mikejolley, automattic, adamkheckler, alexsanford1, annezazu, cena, chaselivingston, csonnek, davor.altman, donnapep, donncha, drawmyface, erania-pinnera, fjorgemota, jacobshere, jakeom, jeherve, jenhooks, jgs, jonryan, kraftbj, lamdayap, lschuyler, macmanx, nancythanki, orangesareorange, rachelsquirrel, renathoc, ryancowles, richardmtl, scarstocea
-Tags: job manager, job listing, job board, job management, job lists, job list, job, jobs, company, hiring, employment, employer, employees, candidate, freelance, internship, job listings, positions, board, application, hiring, listing, manager, recruiting, recruitment, talent
-Requires at least: 6.2
-Tested up to: 6.4
+Tags: jobs, careers, company, hiring, job board
+Requires at least: 6.3
+Tested up to: 6.5
 Requires PHP: 7.2
 Stable tag: 2.3.0
 License: GPLv3
@@ -12,19 +12,19 @@ Create a careers page for your company website, or build a public job board for 
 
 == Description ==
 
-WP Job Manager is a **lightweight** job listing plugin for adding job-board like functionality to your WordPress site. Being shortcode based, it can work with any theme (given a bit of CSS styling) and is really simple to setup.
+WP Job Manager is a **lightweight** job listing plugin for adding job board functionality to your WordPress site. Being shortcode based, it can work with any theme (given a bit of CSS styling) and is really simple to setup.
 
 = Features =
 
 * Add, manage, and categorize job listings using the familiar WordPress UI.
-* Post jobs on your own site, then promote them across a worldwide job network — on LinkedIn, Indeed and more.
 * Searchable & filterable ajax powered job listings added to your pages via shortcodes.
 * Frontend forms for guests and registered users to submit & manage job listings.
 * Allow job listers to preview their listing before it goes live. The preview matches the appearance of a live job listing.
 * Each listing can be tied to an email or website address so that job seekers can apply to the jobs.
 * Searches also display RSS links to allow job seekers to be alerted to new jobs matching their search.
 * Allow logged in employers to view, edit, mark filled, or delete their active job listings.
-* Developer friendly code - Custom Post Types, endpoints & template files.
+* Job statistics for employers about job listing views and search impressions.
+* Developer friendly code - Custom post types, endpoints & template files.
 
 The plugin comes with several shortcodes to output jobs in various formats, and since its built with Custom Post Types you are free to extend it further through themes.
 
@@ -36,7 +36,7 @@ Documentation for the core plugin and extensions can be found [on the docs site 
 
 = Demo =
 
-For a real-life example site, check out [jobs.blog](https://jobs.blog), built by the WP Job Manager team!
+For a real-life example site, check out [jobs.blog](https://jobs.blog), built by the WP Job Manager team! To try out the plugin in an expendable demo site, click the Live Preview button above.
 
 = Extensions =
 
