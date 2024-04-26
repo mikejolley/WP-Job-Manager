@@ -45,7 +45,7 @@ class Job_Listing_Stats {
 	/**
 	 * Stats for a single job listing.
 	 *
-	 * @since $$next-version$$
+	 * @since 2.3.0
 	 *
 	 * @param int                  $job_id
 	 * @param \DateTimeInterface[] $date_range Array of start and end date. Defaults to a range from the job's publishing date to the current day.

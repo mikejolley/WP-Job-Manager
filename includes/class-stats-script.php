@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Add and handle frontend script to collect stats.
  *
- * @since $$next-version$$
+ * @since 2.3.0
  */
 class Stats_Script {
 	use Singleton;

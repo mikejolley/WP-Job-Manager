@@ -321,7 +321,7 @@ abstract class WP_Job_Manager_Form {
 	 * Enqueue the scripts for the form.
 	 */
 	public function enqueue_scripts() {
-		_deprecated_function( __METHOD__, '$$next-version$$', 'WP_Job_Manager\WP_Job_Manager_Form::enqueue_scripts' );
+		_deprecated_function( __METHOD__, '2.3.0', 'WP_Job_Manager\WP_Job_Manager_Form::enqueue_scripts' );
 		WP_Job_Manager\WP_Job_Manager_Recaptcha::instance()->enqueue_scripts();
 	}
 
@@ -332,7 +332,7 @@ abstract class WP_Job_Manager_Form {
 	 * @deprecated
 	 */
 	public function display_recaptcha_field() {
-		_deprecated_function( __METHOD__, '$$next-version$$', 'WP_Job_Manager\WP_Job_Manager_Form::display_recaptcha_field' );
+		_deprecated_function( __METHOD__, '2.3.0', 'WP_Job_Manager\WP_Job_Manager_Form::display_recaptcha_field' );
 		WP_Job_Manager\WP_Job_Manager_Recaptcha::instance()->display_recaptcha_field();
 	}
 
@@ -346,7 +346,7 @@ abstract class WP_Job_Manager_Form {
 	 * @return bool|\WP_Error
 	 */
 	public function validate_recaptcha_field( $success ) {
-		_deprecated_function( __METHOD__, '$$next-version$$', 'WP_Job_Manager\WP_Job_Manager_Form::validate_recaptcha_field' );
+		_deprecated_function( __METHOD__, '2.3.0', 'WP_Job_Manager\WP_Job_Manager_Form::validate_recaptcha_field' );
 		return WP_Job_Manager\WP_Job_Manager_Recaptcha::instance()->validate_recaptcha_field( $success );
 	}
 
@@ -358,7 +358,7 @@ abstract class WP_Job_Manager_Form {
 	 * @return bool
 	 */
 	public function is_recaptcha_available() {
-		_deprecated_function( __METHOD__, '$$next-version$$', 'WP_Job_Manager\WP_Job_Manager_Form::is_recaptcha_available' );
+		_deprecated_function( __METHOD__, '2.3.0', 'WP_Job_Manager\WP_Job_Manager_Form::is_recaptcha_available' );
 		return WP_Job_Manager\WP_Job_Manager_Recaptcha::instance()->is_recaptcha_available();
 	}
 

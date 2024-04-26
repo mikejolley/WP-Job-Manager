@@ -8,7 +8,7 @@
  * @author      Automattic
  * @package     wp-job-manager
  * @category    Template
- * @version     $$next-version$$
+ * @version     2.3.0
  *
  * @var array $key Form field name.
  * @var array $field Form field data.
