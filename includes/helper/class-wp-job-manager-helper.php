@@ -38,6 +38,13 @@ class WP_Job_Manager_Helper {
 	private $language_pack_helper;
 
 	/**
+	 * Nonce generator.
+	 *
+	 * @var WP_Job_Manager_Helper_Nonce
+	 */
+	private WP_Job_Manager_Helper_Nonce $nonce;
+
+	/**
 	 * The single instance of the class.
 	 *
 	 * @var self
@@ -75,10 +82,15 @@ class WP_Job_Manager_Helper {
 		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/helper/class-wp-job-manager-helper-options.php';
 		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/helper/class-wp-job-manager-helper-api.php';
 		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/helper/class-wp-job-manager-helper-language-packs.php';
+		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/helper/class-wp-job-manager-helper-nonce.php';
 		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/helper/class-wp-job-manager-helper-renewals.php';
+		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/helper/class-wp-job-manager-helper-rest-api.php';
 		include_once JOB_MANAGER_PLUGIN_DIR . '/includes/helper/class-wp-job-manager-site-trust-token.php';
 
-		$this->api = WP_Job_Manager_Helper_API::instance();
+		$this->api   = WP_Job_Manager_Helper_API::instance();
+		$this->nonce = new WP_Job_Manager_Helper_Nonce();
+
+		( new WP_Job_Manager_Helper_REST_API( $this->nonce ) )->init();
 
 		add_action( 'job_manager_helper_output', [ $this, 'license_output' ] );
 
@@ -810,6 +822,9 @@ class WP_Job_Manager_Helper {
 			case 'deactivate':
 				$this->deactivate_license( $product_slug, true );
 				break;
+			case 'flush-wpcom-license':
+				$this->flush_wpcom_license( $product_slug );
+				break;
 		}
 	}
 
@@ -952,6 +967,29 @@ class WP_Job_Manager_Helper {
 				'slug' => $product_slug,
 			]
 		);
+	}
+
+	/**
+	 * Flush the WPCOM license for a given product slug, pinging WPJMCOM to sync the license.
+	 *
+	 * @param string $product_slug The slug of the product being processed.
+	 */
+	public function flush_wpcom_license( $product_slug ) {
+		$custom_nonce   = $this->nonce->create_custom_nonce( 'receive-license-' . $product_slug );
+		$activation_url = rest_url( '/wpjm-internal/v1/licensing/receive-wpcom-license-key' );
+		$activation_url = add_query_arg( 'custom_nonce', $custom_nonce, $activation_url );
+
+		$remote = $this->api->flush_wpcom_license( $product_slug, $activation_url );
+		if (
+			false !== $remote &&
+			true === $remote['success']
+		) {
+			$this->add_success( $product_slug, __( 'The license has been synced properly.', 'wp-job-manager' ) );
+			// Clear the options cache to make the product appear in the correct place.
+			wp_cache_delete( 'alloptions', 'options' );
+			return;
+		}
+		$this->add_error( $product_slug, __( 'There was an error while syncing the license.', 'wp-job-manager' ) );
 	}
 
 	/**

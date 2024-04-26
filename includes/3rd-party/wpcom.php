@@ -86,7 +86,24 @@ function wpjm_display_managed_by_wpcom_notice_for_addon( $product_slug ) {
 		return;
 	}
 
-	esc_html_e( 'The license for this add-on is automatically managed by WordPress.com.', 'wp-job-manager' );
+	$helper      = WP_Job_Manager_Helper::instance();
+	$has_license = $helper->has_plugin_license( $product_slug );
+
+	?>
+	<form method="post" class="plugin-license-form">
+		<?php wp_nonce_field( 'wpjm-manage-license' ); ?>
+		<input type="hidden" id="<?php echo esc_attr( sanitize_title( $product_slug ) ); ?>_action" name="action" value="flush-wpcom-license"/>
+		<input type="hidden" id="<?php echo esc_attr( sanitize_title( $product_slug ) ); ?>_plugin" name="product_slug" value="<?php echo esc_attr( $product_slug ); ?>"/>
+
+		<?php if ( $has_license ) : ?>
+			<img src="<?php echo esc_url( JOB_MANAGER_PLUGIN_URL . '/assets/images/icons/checkmark-icon.svg' ); ?>" class='plugin-license-checkmark' aria-hidden='true' alt='<?php esc_attr_e( 'Plugin is activated', 'wp-job-manager' ); ?>'/>
+			<label class="plugin-license-label"><?php esc_html_e( 'The license for this add-on is automatically managed by WordPress.com.', 'wp-job-manager' ); ?></label>
+		<?php else : ?>
+			<label class="plugin-license-label"><?php esc_html_e( 'The license is not activated. Click on the following button to activate it now.', 'wp-job-manager' ); ?></label>
+			<input type="submit" class="button plugin-license-button" name="submit" value="<?php esc_attr_e( 'Activate License', 'wp-job-manager' ); ?>" />
+		<?php endif; ?>
+	</form>
+	<?php
 }
 
 add_action( 'wpjm_manage_license_page_after_license_form', 'wpjm_display_managed_by_wpcom_notice_for_addon' );
