@@ -100,7 +100,6 @@ function wpjm_display_managed_by_wpcom_notice_for_addon( $product_slug ) {
 			<label class="plugin-license-label"><?php esc_html_e( 'The license for this add-on is automatically managed by WordPress.com.', 'wp-job-manager' ); ?></label>
 		<?php else : ?>
 			<label class="plugin-license-label"><?php esc_html_e( 'The license is not activated. Click on the following button to activate it now.', 'wp-job-manager' ); ?></label>
-
 			<input type="submit" class="button plugin-license-button" name="submit" value="<?php esc_attr_e( 'Activate License', 'wp-job-manager' ); ?>" />
 		<?php endif; ?>
 	</form>
