@@ -241,13 +241,13 @@ function updatePackageJsonFiles() {
 	console.log( 'Updating package.json version...' );
 	try {
 		execSync( `npm version ${ version } --no-git-tag-version` );
+		execSync(
+			`git add package.json package-lock.json`,
+		);
 	} catch {
-		throw new Error( 'Version could not be updated in package.json file.' );
+		console.log( 'Version could not be updated in package.json file.' );
 	}
 
-	execSync(
-		`git add package.json package-lock.json`,
-	);
 }
 
 /**
