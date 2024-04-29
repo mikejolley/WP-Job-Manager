@@ -147,6 +147,31 @@ You can view (and contribute) translations via the [translate.wordpress.org](htt
 
 == Changelog ==
 
+### 2.3.0 - 2024-04-29
+New!
+
+* Job Statistics — enable insights like job listing page views, unique visits and search impressions to be collected and displayed to employers in the jobs dashboard.
+* Add Google reCAPTCHA v3 support
+
+Improvements: 
+
+* New: Job statistics overlay
+* Change: Redesign job dashboard
+* Change: Allow job duplication in the job dashboard for any job 
+* Security: Don't return unpublished jobs only in the promote job endpoint
+* Fix renewals for WordPress.com licenses
+* Fix issues with rich e-mails on some e-mail providers
+* Fix e-mail styling in some e-mail clients  
+* Fix expiry date not showing up in backend editor
+* Fix: Add fallback to date format in case it's missing
+* Fix: Prevent past dates from being used in the datepicker
+
+For developers:
+
+* Add filter to disable promoted jobs
+* Add placeholder options to select field
+* Job dashboard template has been rewritten
+
 ### 2.3.0 - 2024-04-26
 New!
 
@@ -204,29 +229,4 @@ For developers:
 
 ### 2.2.1 - 2024-01-31
 * Fix PHP 7.x error for mixed returned type (#2726)
-
-### 2.2.0 - 2024-01-29
-New:
-
-* Allow scheduling listings during job submission — add an option to show a 'Scheduled Date' field in the job submission form
-* Add new [jobs] shortcode parameter, featured_first so you can ensure featured listings always show up on top.
-* Add support for user sessions without a full account (used in the Job Alerts extension)
-
-Changes:
-
-* Improve styling for rich text e-mails
-* Include plain text alternative for rich text e-mails for better compatibility
-* Store previous license when plugin is deactivated for easier reactivation later.
-* Update design for settings and marketplace pages
-
-Fixes:
-
-* Fix custom role permission issues (#2673)
-* Fix RSS, Reset, Add Alert links not showing on search page without a keyword
-* Improve PHP 8 support
-* Fix numeric settings field issues
-* Improve e-mail formatting and encoding, remove extra whitespace
-* Add file type validation and error message to company logo upload
-* Fix cache issue when marking jobs as filled/not filled via bulk actions
-* Do not emit warning when user with insufficient access to Job Manager menu tries to access wp-admin
 
