@@ -56,7 +56,7 @@ class Release_Notice {
 <ul>
 	<li>Tracks page views and unique visitors, search impressions and apply button clicks.</li>
 	<li>Adds a new overlay to the employer dashboard with aggregated statistics and a daily breakdown chart.</li>
-	<li>Integrates with Job Alerts, Applications, and Bookmarks add-ons.</li>
+	<li>Integrates with Job Alerts, Applications, and Bookmarks extensions.</li>
 	<li>GDPR-compliant, with no personal user information collected.</li>
 </ul>
 ',
@@ -75,7 +75,7 @@ class Release_Notice {
 				],
 				[
 					'label' => __( 'See what\'s new in 2.3', 'wp-job-manager' ),
-					'url'   => 'https://wpjobmanager.com/2024/03/27/new-in-2-3-job-statistics/',
+					'url'   => 'https://wpjobmanager.com/2024/04/29/new-in-2-3-job-statistics/',
 					'class' => 'is-link',
 				],
 			],
