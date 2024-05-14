@@ -792,7 +792,7 @@ class WP_Job_Manager_Post_Types {
 
 		if ( ! empty( $job_manager_keyword ) ) {
 			$query_args['s'] = $job_manager_keyword;
-			add_filter( 'posts_search', 'get_job_listings_keyword_search' );
+			add_filter( 'posts_search', 'get_job_listings_keyword_search', 10, 2 );
 		}
 
 		if ( empty( $query_args['meta_query'] ) ) {
@@ -808,7 +808,7 @@ class WP_Job_Manager_Post_Types {
 		add_action( 'rss2_ns', [ $this, 'job_feed_namespace' ] );
 		add_action( 'rss2_item', [ $this, 'job_feed_item' ] );
 		do_feed_rss2( false );
-		remove_filter( 'posts_search', 'get_job_listings_keyword_search' );
+		remove_filter( 'posts_search', 'get_job_listings_keyword_search', 10 );
 	}
 
 	/**
