@@ -380,6 +380,7 @@ if ( ! function_exists( 'get_job_listings_keyword_search' ) ) :
 
 			/**
 			 * Constructs SQL clauses that return posts which include or exclude the search term in the provided columns.
+			 * The function replicates the functionality of WP_Query::parse_search.
 			 *
 			 * @see WP_Query::parse_search()
 			 *
@@ -407,8 +408,10 @@ if ( ! function_exists( 'get_job_listings_keyword_search' ) ) :
 					$conditions[] = $wpdb->prepare( "( {$wpdb->posts}.$search_column $like_op %s )", $like );
 				}
 
+				// Filter documented in WP_Query::get_posts.
 				$allow_query_attachment_by_filename = apply_filters( 'wp_allow_query_attachment_by_filename', false );
 				if ( ! empty( $allow_query_attachment_by_filename ) ) {
+					// sq1 is the wp_postmeta join for attachments in WP_Query::get_posts.
 					$conditions[] = $wpdb->prepare( "(sq1.meta_value $like_op %s)", $like );
 					//phpcs:enabled WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				}
@@ -428,6 +431,7 @@ if ( ! function_exists( 'get_job_listings_keyword_search' ) ) :
 			$search_columns = [ $search_columns ];
 		}
 
+		// Filter documented in WP_Query::parse_search.
 		$search_columns = (array) apply_filters( 'post_search_columns', $search_columns, $wp_query->query_vars['s'], $wp_query );
 
 		// Use only supported search columns.
