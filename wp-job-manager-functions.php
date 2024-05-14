@@ -404,6 +404,7 @@ if ( ! function_exists( 'get_job_listings_keyword_search' ) ) :
 
 				$conditions = [];
 				foreach ( $search_columns as $search_column ) {
+					$search_column = esc_sql( $search_column );
 					//phpcs:disabled WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Variables are safe or escaped.
 					$conditions[] = $wpdb->prepare( "( {$wpdb->posts}.$search_column $like_op %s )", $like );
 				}
