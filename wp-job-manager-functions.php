@@ -351,6 +351,7 @@ if ( ! function_exists( 'get_job_listings_keyword_search' ) ) :
 
 				$not_string = $is_excluding ? 'NOT ' : '';
 				$conditions = [];
+				$meta_value = $wildcard_search . $wpdb->esc_like( $search_term ) . $wildcard_search;
 
 				/**
 				 * Can be used to disable searching post meta for job searches.
@@ -359,7 +360,6 @@ if ( ! function_exists( 'get_job_listings_keyword_search' ) ) :
 				 */
 				if ( apply_filters( 'job_listing_search_post_meta', true ) ) {
 
-					$meta_value = $wildcard_search . $wpdb->esc_like( $search_term ) . $wildcard_search;
 					// Only selected meta keys.
 					if ( $searchable_meta_keys ) {
 						$meta_keys = implode( "','", array_map( 'esc_sql', $searchable_meta_keys ) );
