@@ -96,7 +96,7 @@ class UI_Elements {
 		}
 
 		$attrs = [
-			'class' => join( ' ', [ $class, $args['class'] ] ),
+			'class' => implode( ' ', [ $class, $args['class'] ] ),
 			'href'  => esc_url( $args['url'] ),
 		];
 
