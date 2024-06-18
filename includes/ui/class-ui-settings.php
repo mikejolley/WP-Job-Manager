@@ -91,7 +91,6 @@ class UI_Settings {
 					[
 						'url'   => '/',
 						'label' => 'Sign in',
-						'class' => [],
 					],
 				],
 			]
@@ -139,12 +138,10 @@ class UI_Settings {
 					[
 						'url'   => '/',
 						'label' => 'Sign in',
-						'class' => [],
 					],
 					[
 						'url'   => '/',
 						'label' => 'Create Account',
-						'class' => [],
 					],
 				],
 			]
