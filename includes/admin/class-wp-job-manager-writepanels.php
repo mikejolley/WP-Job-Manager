@@ -673,10 +673,6 @@ class WP_Job_Manager_Writepanels {
 	public function save_job_listing_data( $post_id, $post ) {
 		global $wpdb;
 
-		// These need to exist.
-		add_post_meta( $post_id, '_filled', 0, true );
-		add_post_meta( $post_id, '_featured', 0, true );
-
 		// Save fields.
 		foreach ( $this->job_listing_fields() as $key => $field ) {
 			if ( isset( $field['type'] ) && 'info' === $field['type'] ) {
