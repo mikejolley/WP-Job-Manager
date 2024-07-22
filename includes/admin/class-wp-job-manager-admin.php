@@ -135,7 +135,7 @@ class WP_Job_Manager_Admin {
 			wp_enqueue_script( 'job_manager_admin_js' );
 
 			WP_Job_Manager::register_script( 'job_tags_upsell_js', 'js/admin/job-tags-upsell.js', [], true );
-			if ( ! class_exists( 'WP_Job_Manager_Job_Tags' ) ) {
+			if ( ! class_exists( 'WP_Job_Manager_Job_Tags' ) && $screen->is_block_editor() ) {
 				wp_enqueue_script( 'job_tags_upsell_js' );
 			}
 
