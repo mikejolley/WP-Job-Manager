@@ -970,10 +970,6 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 	 * @param  array $values
 	 */
 	protected function update_job_data( $values ) {
-		// Set defaults.
-		add_post_meta( $this->job_id, '_filled', 0, true );
-		add_post_meta( $this->job_id, '_featured', 0, true );
-
 		$maybe_attach = [];
 
 		// Loop fields and save meta and term data.
