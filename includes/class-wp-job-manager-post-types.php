@@ -205,7 +205,7 @@ class WP_Job_Manager_Post_Types {
 		add_filter( 'wp_insert_post_data', [ $this, 'fix_post_name' ], 10, 2 );
 		add_action( 'add_post_meta', [ $this, 'maybe_add_geolocation_data' ], 10, 3 );
 		add_action( 'update_post_meta', [ $this, 'update_post_meta' ], 10, 4 );
-		add_action( 'wp_insert_post', [ $this, 'maybe_add_default_meta_data' ], 10, 2 );
+		add_action( 'wp_after_insert_post', [ $this, 'maybe_add_default_meta_data' ], 10, 2 );
 		add_filter( 'post_types_to_delete_with_user', [ $this, 'delete_user_add_job_listings_post_type' ] );
 
 		add_action( 'transition_post_status', [ $this, 'track_job_submission' ], 10, 3 );
