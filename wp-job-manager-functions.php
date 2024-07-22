@@ -363,17 +363,18 @@ if ( ! function_exists( 'get_job_listings_keyword_search' ) ) :
 					// Only selected meta keys.
 					if ( $searchable_meta_keys ) {
 						$meta_keys = implode( "','", array_map( 'esc_sql', $searchable_meta_keys ) );
-						//phpcs:disabled WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Variables are safe or escaped.
-						$conditions[] = $wpdb->prepare( "{$wpdb->posts}.ID {$not_string}IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key IN ( '${meta_keys}' ) AND meta_value LIKE %s )", $meta_value );
+						// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Variables are safe or escaped.
+						$conditions[] = $wpdb->prepare( "{$wpdb->posts}.ID {$not_string}IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key IN ( '{$meta_keys}' ) AND meta_value LIKE %s )", $meta_value );
 					} else {
 						// No meta keys defined, search all post meta value.
 						$conditions[] = $wpdb->prepare( "{$wpdb->posts}.ID {$not_string}IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_value LIKE %s )", $meta_value );
-						//phpcs:enabled WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 					}
 				}
 
 				// Search taxonomy.
-				$conditions[] = $wpdb->prepare( "{$wpdb->posts}.ID ${not_string}IN ( SELECT object_id FROM {$wpdb->term_relationships} AS tr LEFT JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id LEFT JOIN {$wpdb->terms} AS t ON tt.term_id = t.term_id WHERE t.name LIKE %s )", $meta_value );
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Variables are safe or escaped.
+				$conditions[] = $wpdb->prepare( "{$wpdb->posts}.ID {$not_string}IN ( SELECT object_id FROM {$wpdb->term_relationships} AS tr LEFT JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id LEFT JOIN {$wpdb->terms} AS t ON tt.term_id = t.term_id WHERE t.name LIKE %s )", $meta_value );
 
 				return $conditions;
 			}
