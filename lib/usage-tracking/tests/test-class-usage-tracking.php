@@ -15,6 +15,7 @@ Usage_Tracking_Test_Subclass::get_instance();
 class WP_Job_Manager_Usage_Tracking_Test extends WP_UnitTestCase {
 	private $event_counts       = array();
 	private $track_http_request = array();
+	private $usage_tracking;
 
 	public function setUp(): void {
 		parent::setUp();

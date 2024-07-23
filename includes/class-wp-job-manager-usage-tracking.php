@@ -160,7 +160,7 @@ class WP_Job_Manager_Usage_Tracking extends WP_Job_Manager_Usage_Tracking_Base {
 	 * @return self
 	 */
 	public static function get_instance() {
-		return self::get_instance_for_subclass( get_class() );
+		return self::get_instance_for_subclass( static::class );
 	}
 
 	/**
