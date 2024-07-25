@@ -303,7 +303,7 @@ if ( ! function_exists( 'get_job_listings_keyword_search' ) ) :
 	 * @since 1.21.0
 	 * @since 1.26.0 Moved from the `posts_clauses` filter to the `posts_search` to use WP Query's keyword
 	 *               search for `post_title` and `post_content`.
-	 * @since $$next-version$$ Reimplemented to provide the same functionality with WP core search:
+	 * @since 2.4.0 Reimplemented to provide the same functionality with WP core search:
 	 *                 - Support for double quotes and negating terms (-).
 	 *                 - Breaks down terms into individual words.
 	 *                 - Meta and taxonomy name search happens together with search in title, excerpt and post content.
