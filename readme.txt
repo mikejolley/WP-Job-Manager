@@ -1,8 +1,8 @@
 === WP Job Manager ===
 Contributors: mikejolley, automattic, adamkheckler, alexsanford1, annezazu, cena, chaselivingston, csonnek, davor.altman, donnapep, donncha, drawmyface, erania-pinnera, fjorgemota, jacobshere, jakeom, jeherve, jenhooks, jgs, jonryan, kraftbj, lamdayap, lschuyler, macmanx, nancythanki, orangesareorange, rachelsquirrel, renathoc, ryancowles, richardmtl, scarstocea
 Tags: jobs, careers, company, hiring, job board
-Requires at least: 6.3
-Tested up to: 6.5
+Requires at least: 6.4
+Tested up to: 6.6
 Requires PHP: 7.2
 Stable tag: 2.4.0
 License: GPLv3
