@@ -1,5 +1,12 @@
 # WP Job Manager
 
+## 2.4.0 - 2024-08-08
+* Fix job dashboard actions menu in Safari
+* Fix PHP 8.3 support
+* Remove support for Internet Explorer 11
+* Fix Wordpress 6.6 compatibility
+* Fix classic editor support for job listings
+
 ## 2.3.0 - 2024-04-29
 New!
 
