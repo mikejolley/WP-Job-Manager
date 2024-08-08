@@ -6,6 +6,10 @@
 	position: static;
 }
 
+.jm-dialog:not([open]) {
+	display: none !important;
+}
+
 .jm-dialog-open {
 	position: fixed;
 	left: 0;
