@@ -633,7 +633,7 @@ class WP_Job_Manager_Shortcodes {
 	 * @output string
 	 */
 	public function job_dashboard_title_column_status( $job ) {
-		__deprecated_function( __METHOD__, '$$next-version$$', 'Job_Dashboard_Shortcode::the_job_status' );
+		_deprecated_function( __METHOD__, '$$next-version$$', 'Job_Dashboard_Shortcode::the_job_status' );
 		Job_Dashboard_Shortcode::instance()->the_status( $job );
 	}
 
