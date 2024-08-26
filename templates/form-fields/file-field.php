@@ -46,7 +46,8 @@ if ( ! empty( $field['ajax'] ) && job_manager_user_can_upload_file_via_ajax() ) 
 	type="file"
 	class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
 	data-file_types="<?php echo esc_attr( implode( '|', $allowed_mime_types ) ); ?>"
-	<?php if ( ! empty( $field['multiple'] ) ) echo 'multiple'; ?>
+	<?php if ( ! empty( $field['required'] ) ) echo ' required'; ?>
+	<?php if ( ! empty( $field['multiple'] ) ) echo ' multiple'; ?>
 	<?php if ( $file_limit ) echo ' data-file_limit="' . absint( $file_limit ) . '"';?>
 	<?php if ( ! empty( $field['file_limit_message'] ) ) echo ' data-file_limit_message="' . esc_attr( $field['file_limit_message'] ) . '"';?>
 	name="<?php echo esc_attr( isset( $field['name'] ) ? $field['name'] : $key ); ?><?php if ( ! empty( $field['multiple'] ) ) echo '[]'; ?>"
