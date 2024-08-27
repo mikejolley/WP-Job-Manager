@@ -146,6 +146,28 @@ class WP_Job_Manager_Shortcodes {
 	}
 
 	/**
+	 * Handles actions which need to be run before the shortcode e.g. post actions.
+	 *
+	 * @deprecated $$next-version$$ - Moved to Job_Dashboard_Shortcode.
+	 */
+	public function shortcode_action_handler() {
+		_deprecated_function( __METHOD__, '$$next-version$$', 'Job_Dashboard_Shortcode::handle_actions' );
+		Job_Dashboard_Shortcode::instance()->handle_actions();
+	}
+
+	/**
+	 * Handles actions on job dashboard.
+	 *
+	 * @throws Exception On action handling error.
+	 *
+	 * @deprecated $$next-version$$ - Moved to Job_Dashboard_Shortcode.
+	 */
+	public function job_dashboard_handler() {
+		_deprecated_function( __METHOD__, '$$next-version$$', 'Job_Dashboard_Shortcode::handle_actions' );
+		Job_Dashboard_Shortcode::instance()->handle_actions();
+	}
+
+	/**
 	 * Displays edit job form.
 	 *
 	 * @deprecated 2.3.0 - Moved to Job_Dashboard_Shortcode.
@@ -586,6 +608,36 @@ class WP_Job_Manager_Shortcodes {
 
 		return ob_get_clean();
 	}
+
+	/**
+	 * Add expiration details to the job dashboard date column.
+	 *
+	 * @param \WP_Post $job
+	 *
+	 * @deprecated $$next-version$$ - Moved to Job_Dashboard_Shortcode.
+	 *
+	 * @output string
+	 */
+	public function job_dashboard_date_column_expires( $job ) {
+		_deprecated_function( __METHOD__, '$$next-version$$', 'Job_Dashboard_Shortcode::the_expiration_date' );
+		Job_Dashboard_Shortcode::instance()->the_expiration_date( $job );
+	}
+
+	/**
+	 * Add job status to the job dashboard title column.
+	 *
+	 * @param \WP_Post $job
+	 *
+	 * @deprecated $$next-version$$ - Moved to Job_Dashboard_Shortcode.
+	 *
+	 * @output string
+	 */
+	public function job_dashboard_title_column_status( $job ) {
+		_deprecated_function( __METHOD__, '$$next-version$$', 'Job_Dashboard_Shortcode::the_job_status' );
+		Job_Dashboard_Shortcode::instance()->the_status( $job );
+	}
+
+
 
 }
 
