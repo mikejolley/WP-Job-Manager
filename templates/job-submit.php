@@ -15,10 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-global $post, $job_manager;
+global $job_manager;
 $captcha_version = WP_Job_Manager\WP_Job_Manager_Recaptcha::instance()->get_recaptcha_version();
 
-if ( job_manager_user_can_view_submit_job_listing( $post->ID ) ) : ?>
+if ( job_manager_user_can_view_submit_job_listing() ) : ?>
 	<form action="<?php echo esc_url( $action ); ?>" method="post" id="submit-job-form" class="job-manager-form" enctype="multipart/form-data">
 
 		<?php
