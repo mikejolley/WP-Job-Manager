@@ -1243,9 +1243,11 @@ class WP_Job_Manager_Post_Types {
 		$job_is_editable = true;
 		$post_status     = get_post_status( $job_id );
 
+		$published = in_array( $post_status, [ 'future', 'publish' ], true );
+
 		if (
-			( 'publish' === $post_status && ! wpjm_user_can_edit_published_submissions() )
-			|| ( 'publish' !== $post_status && ! job_manager_user_can_edit_pending_submissions() )
+			( $published && ! wpjm_user_can_edit_published_submissions() )
+			|| ( ! $published && ! job_manager_user_can_edit_pending_submissions() )
 		) {
 			$job_is_editable = false;
 		}
