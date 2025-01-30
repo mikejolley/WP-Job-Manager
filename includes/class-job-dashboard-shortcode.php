@@ -242,6 +242,7 @@ class Job_Dashboard_Shortcode {
 				break;
 			case 'pending_payment':
 			case 'pending':
+			case 'future':
 				if ( \WP_Job_Manager_Post_Types::job_is_editable( $job->ID ) ) {
 					$actions['edit'] = [
 						'label' => __( 'Edit', 'wp-job-manager' ),
