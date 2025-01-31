@@ -624,6 +624,16 @@ class WP_Job_Manager_Settings {
 							'desc'              => sprintf( __( 'Enter which <a href="%s">roles or capabilities</a> allow visitors to view a single job listing. If no value is selected, everyone (including logged out guests) will be able to view job listings.', 'wp-job-manager' ), 'http://codex.wordpress.org/Roles_and_Capabilities' ),
 							'track'             => 'bool',
 						],
+						[
+							'name'              => 'job_manager_submit_job_listing_capability',
+							'std'               => [],
+							'label'             => __( 'Submit Job Capability', 'wp-job-manager' ),
+							'type'              => 'capabilities',
+							'sanitize_callback' => [ $this, 'sanitize_capabilities' ],
+							// translators: Placeholder %s is the url to the WordPress core documentation for capabilities and roles.
+							'desc'              => sprintf( __( 'Enter which <a href="%s">roles or capabilities</a> allow visitors to submit a job listing. If no value is selected, everyone (including logged out guests) will be able to submit job listings.', 'wp-job-manager' ), 'http://codex.wordpress.org/Roles_and_Capabilities' ),
+							'track'             => 'bool',
+						],
 					],
 				],
 			]

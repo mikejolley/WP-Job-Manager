@@ -1745,7 +1745,7 @@ function job_manager_count_user_job_listings( $user_id = 0 ) {
 }
 
 /**
- * True if an the user can browse resumes.
+ * True if an the user can browse job listings.
  *
  * @return bool
  */
@@ -1774,7 +1774,7 @@ function job_manager_user_can_browse_job_listings() {
 }
 
 /**
- * True if an the user can view a resume.
+ * True if an the user can view a job listing.
  *
  * @since 1.37.0
  *
@@ -1815,6 +1815,37 @@ function job_manager_user_can_view_job_listing( $job_id ) {
 	 * @param int     $job_id
 	 */
 	return apply_filters( 'job_manager_user_can_view_job', $can_view, $job_id );
+}
+
+/**
+ * True if an the user can view submit job listing.
+ *
+ * @since $$next_version$$
+ *
+ * @return bool
+ */
+function job_manager_user_can_view_submit_job_listing() {
+	$can_view = true;
+	$caps     = get_option( 'job_manager_submit_job_listing_capability' );
+
+	if ( $caps ) {
+		$can_view = false;
+		foreach ( $caps as $cap ) {
+			if ( current_user_can( $cap ) ) {
+				$can_view = true;
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Filter if the current user can or cannot view job submission
+	 *
+	 * @since $$next_version$$
+	 *
+	 * @param boolean $can_view
+	 */
+	return apply_filters( 'job_manager_user_can_view_submit_job', $can_view );
 }
 
 /**
