@@ -205,12 +205,15 @@ class WP_Job_Manager_Post_Types {
 		add_filter( 'wp_insert_post_data', [ $this, 'fix_post_name' ], 10, 2 );
 		add_action( 'add_post_meta', [ $this, 'maybe_add_geolocation_data' ], 10, 3 );
 		add_action( 'update_post_meta', [ $this, 'update_post_meta' ], 10, 4 );
+		add_action( 'updated_post_meta', [ $this, 'delete_filled_job_listing_transient' ], 10, 4 );
 		add_action( 'wp_insert_post', [ $this, 'maybe_add_default_meta_data' ], 10, 2 );
 		add_filter( 'post_types_to_delete_with_user', [ $this, 'delete_user_add_job_listings_post_type' ] );
 
 		add_action( 'transition_post_status', [ $this, 'track_job_submission' ], 10, 3 );
 
 		add_action( 'parse_query', [ $this, 'add_feed_query_args' ] );
+		add_action( 'pre_get_posts', [ $this, 'maybe_hide_filled_job_listings' ] );
+		add_action( 'pre_get_posts', [ $this, 'maybe_hide_expired_job_listings' ] );
 
 		// Single job content.
 		$this->job_content_filter( true );
@@ -809,6 +812,133 @@ class WP_Job_Manager_Post_Types {
 		add_action( 'rss2_item', [ $this, 'job_feed_item' ] );
 		do_feed_rss2( false );
 		remove_filter( 'posts_search', 'get_job_listings_keyword_search', 10 );
+	}
+
+	/**
+	 * Retrieve and return the post IDs of any job listings marked as filled.
+	 *
+	 * @return array Array of filled job listing post IDs.
+	 */
+	public function get_filled_job_listings(): array {
+
+		$filled_jobs_transient = get_transient( 'hide_filled_jobs_transient' );
+		if ( false === $filled_jobs_transient ) {
+			$filled_jobs_transient = get_posts(
+				[
+					'post_status'    => 'publish',
+					'post_type'      => 'job_listing',
+					'fields'         => 'ids',
+					'posts_per_page' => -1,
+					'meta_query'     => [
+						[
+							'key'     => '_filled',
+							'value'   => '1',
+							'compare' => '=',
+						],
+					],
+				]
+			);
+			set_transient( 'hide_filled_jobs_transient', $filled_jobs_transient, DAY_IN_SECONDS );
+		}
+		return $filled_jobs_transient;
+	}
+
+	/**
+	 * Maybe exclude filled job listings from search and archive pages.
+	 *
+	 * @param $query WP_Query $query
+	 *
+	 * @return void
+	 */
+	public function maybe_hide_filled_job_listings( WP_Query $query ): void {
+		$hide_filled_positions = get_option( 'job_manager_hide_filled_positions' );
+
+		if ( ! $hide_filled_positions ) {
+			return;
+		}
+
+		/**
+		 * We want to ensure this only runs when: (1) not in admin and (2) the query is the main query and (3) the query
+		 * is either a search query or an archive query. This is to address complications stemming from the following
+		 * feature request: https://github.com/Automattic/WP-Job-Manager/issues/1884
+		 *
+		 * See also:
+		 *
+		 * https://github.com/Automattic/WP-Job-Manager/pull/1570
+		 * https://github.com/Automattic/WP-Job-Manager/pull/2367
+		 * https://github.com/Automattic/WP-Job-Manager/issues/2423
+		 */
+
+		if (
+			! is_admin()
+			&& $query->is_main_query()
+			&& ( $query->is_search() || $query->is_archive() )
+		) {
+
+			$query->set( 'post__not_in', $this->get_filled_job_listings() );
+		}
+	}
+
+	/**
+	 * Maybe exclude expired job listings from search and archive pages.
+	 *
+	 * @param $query WP_Query $query
+	 *
+	 * @return void
+	 */
+	public function maybe_hide_expired_job_listings( WP_Query $query ): void {
+		$hide_expired = get_option( 'job_manager_hide_expired' );
+
+		if ( ! $hide_expired ) {
+			return;
+		}
+
+		/**
+		 * We want to ensure this only runs when: (1) not in admin and (2) the query is the main query and (3) the query.
+		 * See the comment in the maybe_hide_filled_job_listings() method for more information.
+		 */
+
+		if (
+			! is_admin()
+			&& $query->is_main_query()
+			&& ( $query->is_search() || $query->is_archive() )
+		) {
+
+			$this->make_expired_private();
+
+			add_action( 'posts_selection', [ $this, 'make_expired_public' ] );
+		}
+	}
+
+	/**
+	 * Make the expired post status public.
+	 *
+	 * @return void
+	 * @internal
+	 */
+	public function make_expired_public(): void {
+
+		global $wp_post_statuses;
+
+		if ( isset( $wp_post_statuses['expired'] ) ) {
+			$wp_post_statuses['expired']->public = true;
+		}
+
+	}
+
+	/**
+	 * Make the expired post status private.
+	 *
+	 * @return void
+	 * @internal
+	 */
+	public function make_expired_private() {
+
+		global $wp_post_statuses;
+
+		if ( isset( $wp_post_statuses['expired'] ) ) {
+			$wp_post_statuses['expired']->public = false;
+		}
 	}
 
 	/**
@@ -2049,5 +2179,24 @@ class WP_Job_Manager_Post_Types {
 		$types[] = self::PT_LISTING;
 
 		return $types;
+	}
+
+	/**
+	 * Delete the 'job_manager_hide_filled_jobs' transient when meta is updated.
+	 *
+	 * @param int    $meta_id    ID of updated metadata entry.
+	 * @param int    $object_id  ID of the object metadata is for.
+	 * @param string $meta_key   Metadata key.
+	 * @param mixed  $_meta_value Metadata value. This will be a PHP-serialized string representation of the value if the value is an array, an object, or itself a PHP-serialized string.
+	 *
+	 * @return void
+	 */
+	public function delete_filled_job_listing_transient( $meta_id, $object_id, $meta_key, $_meta_value ) {
+
+		if ( '_edit_lock' !== $meta_key || 'job_listing' !== get_post_type( $object_id ) ) {
+			return;
+		}
+
+		delete_transient( 'hide_filled_jobs_transient' );
 	}
 }
